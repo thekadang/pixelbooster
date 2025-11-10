@@ -8,7 +8,6 @@ import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs/promises';
-import isDev from 'electron-is-dev';
 
 // 타입 임포트
 import {
@@ -30,8 +29,9 @@ import { LogManager } from './src/services/log-manager';
 import { BackupManager } from './src/services/backup-manager';
 import { AffiliateManager } from './src/services/affiliate-manager';
 
-// 개발 환경 판단
-const isDevelopment: boolean = isDev;
+// 개발 환경 판단 (Electron 내장 API 사용)
+// app.isPackaged: true = 프로덕션 빌드, false = 개발 모드
+const isDevelopment: boolean = !app.isPackaged;
 
 // 메인 윈도우 참조
 let mainWindow: BrowserWindow | null = null;
