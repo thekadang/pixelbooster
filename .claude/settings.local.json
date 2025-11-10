@@ -32,7 +32,11 @@
       "Bash(.env)",
       "Bash(git rm:*)",
       "Bash(supabase login:*)",
-      "Bash(node scripts/generate-temp-icon.js:*)"
+      "Bash(node scripts/generate-temp-icon.js:*)",
+      "Bash(npm run build:win:*)",
+      "Bash(if exist dist-electron rd /s /q dist-electron)",
+      "Bash(dir:*)",
+      "Bash(nul)"
     ],
     "deny": [],
     "ask": []

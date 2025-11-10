@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 1. COMMIT_HISTORY.md 확인 - 최근 커밋 및 작업 이력
 2. task.md 확인 - 현재 진행 단계 (Phase 5 완료! 100% 완료 🎉)
-3. 다음 작업: 테스트 및 배포 (선택 사항)
+3. 다음 작업: 통합 테스트 및 배포 준비 완료 ✅
 ```
 
 ### 2단계: 개발 명령어
@@ -133,9 +133,15 @@ docs/     - 전체 기술 문서
 
 ## 📦 배포
 
-- **[빌드 프로세스](docs/deployment/build-process.md)** - Windows/Mac 빌드 및 패키징
-- **[자동 업데이트](docs/deployment/auto-update.md)** - electron-updater 연동 ✅ (구현 완료)
-- **[배포 전략](docs/deployment/deployment-strategy.md)** - 릴리스 프로세스
+### 빌드 및 패키징
+- **[빌드 프로세스](docs/deployment/build-process.md)** - Windows/Mac 빌드 및 패키징 ✅
+- **[자동 업데이트](docs/deployment/auto-update.md)** - electron-updater 연동 ✅
+
+### 테스트 및 배포
+- **[통합 테스트 가이드](docs/development/testing-guide.md)** - 전체 기능 테스트 시나리오 ✅
+- **[배포 전 체크리스트](docs/deployment/deployment-checklist.md)** - 프로덕션 배포 검증 체크리스트 ✅
+- **[베타 테스트 가이드](docs/deployment/beta-testing-guide.md)** - 베타 테스터 모집 및 피드백 수집 ✅
+- **[GitHub Release 가이드](docs/deployment/github-release-guide.md)** - GitHub Releases 배포 및 자동 업데이트 ✅
 
 ---
 
