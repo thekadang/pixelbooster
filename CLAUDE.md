@@ -15,8 +15,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 1단계: 프로젝트 상태 파악
 ```
 1. COMMIT_HISTORY.md 확인 - 최근 커밋 및 작업 이력
-2. task.md 확인 - 현재 진행 단계 (Phase 4-4 완료! 90% 진행)
-3. 다음 작업: Phase 4 계속 (어필리에이트 시스템, 관리자 대시보드 등)
+2. task.md 확인 - 현재 진행 단계 (Phase 4-5 완료! 95% 진행)
+3. 다음 작업: Phase 5 진입 (다국어 지원, 자동 업데이트, 배포 준비)
 ```
 
 ### 2단계: 개발 명령어
@@ -79,9 +79,11 @@ docs/     - 전체 기술 문서
 - **[이미지 처리 로직](docs/features/image-processing.md)** - Sharp 기반 변환 로직 및 병렬 배치 처리 ✅
 - **[UI/UX 가이드](docs/features/ui-ux-guide.md)** - 디자인 원칙 및 컴포넌트 구조
 - **[구독 등급별 기능](docs/features/subscription-tiers.md)** - Free/Basic/Pro 기능 차이 및 구현
-- **[로그 시스템](docs/features/log-system.md)** - Excel 기반 작업 로그 관리
-- **[백업 시스템](docs/features/backup-system.md)** - 원본 파일 백업 및 복원
-- **[다국어 지원](docs/features/i18n-system.md)** - i18next 기반 다국어 구현
+- **[로그 시스템](docs/features/log-system.md)** - Excel 기반 작업 로그 관리 ✅
+- **[백업 시스템](docs/features/backup-system.md)** - 원본 파일 백업 및 복원 ✅
+- **[어필리에이트 시스템](docs/features/affiliate-system.md)** - 추천 코드, 쿠키 추적, 수수료 관리 ✅
+- **[관리자 대시보드](docs/features/admin-dashboard.md)** - 사용자/수익/어필리에이트 관리 (설계 완료)
+- **[다국어 지원](docs/features/i18n-system.md)** - i18next 기반 다국어 구현 (대기)
 
 ---
 

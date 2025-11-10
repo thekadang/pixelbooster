@@ -30,7 +30,8 @@
       "Bash(cat:*)",
       "Bash(echo:*)",
       "Bash(.env)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(supabase login:*)"
     ],
     "deny": [],
     "ask": []
