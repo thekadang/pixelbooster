@@ -4,6 +4,8 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/thekadang/pixelbooster)
+[![Version](https://img.shields.io/badge/version-0.1.0-brightgreen.svg)](https://github.com/thekadang/pixelbooster/releases)
+[![Release](https://img.shields.io/github/v/release/thekadang/pixelbooster)](https://github.com/thekadang/pixelbooster/releases/latest)
 
 ---
 
@@ -88,31 +90,57 @@ thekadang_pixelbooster/
 
 ## 🚀 빠른 시작
 
-### 필수 요구사항
+### 사용자용 설치 (일반 사용자)
+
+#### Windows
+1. [GitHub Releases](https://github.com/thekadang/pixelbooster/releases/latest)에서 최신 버전 다운로드
+2. `픽셀부스터 Setup 0.1.0.exe` 파일 실행
+3. 설치 마법사 지침에 따라 설치
+4. 시작 메뉴 또는 바탕화면 아이콘으로 실행
+
+#### macOS (향후 지원)
+- DMG 파일 다운로드 및 Applications 폴더로 드래그
+
+#### 시스템 요구사항
+- **OS**: Windows 10/11 (64-bit) 또는 macOS 10.13+
+- **RAM**: 최소 4GB (권장 8GB 이상)
+- **디스크**: 500MB 이상 여유 공간
+- **인터넷**: 첫 실행 시 인증 및 업데이트 확인
+
+### 개발자용 설치 (빌드 및 개발)
+
+#### 필수 요구사항
 - Node.js 18+
 - npm 또는 yarn
 - Git
 
-### 설치 및 실행
+#### 로컬 개발 환경 구축
 
 ```bash
-# 저장소 클론
+# 1. 저장소 클론
 git clone https://github.com/thekadang/pixelbooster.git
 cd pixelbooster
 
-# 의존성 설치
+# 2. 의존성 설치
 npm install
 
-# 클라이언트 개발 모드 실행
-cd client
-npm run dev
+# 3. 환경 변수 설정
+# .env.example을 .env로 복사하고 Supabase 키 입력
+cp .env.example .env
 
-# 관리자 대시보드 실행
-cd admin
+# 4. 개발 서버 실행
 npm run dev
+# 또는 별도 터미널에서:
+# npm run dev:webpack  (Webpack 개발 서버)
+# npm run dev:electron (Electron 앱)
+
+# 5. 프로덕션 빌드
+npm run build:win    # Windows 빌드
+npm run build:mac    # macOS 빌드 (macOS 환경 필요)
+npm run build:linux  # Linux 빌드
 ```
 
-자세한 내용은 [개발 환경 설정 가이드](docs/development/setup.md)를 참고하세요.
+자세한 개발 가이드는 [개발 환경 설정 가이드](docs/development/setup.md)를 참고하세요.
 
 ---
 
@@ -128,38 +156,35 @@ npm run dev
 
 ---
 
-## 🔄 개발 진행 상황
+## 🎉 v0.1.0 릴리스 (첫 공식 릴리스!)
 
-**현재 단계**: Phase 4 완료! 🎉 (고급 기능 구현)
-**진행률**: 97%
+**릴리스 날짜**: 2025-11-11
+**상태**: Production Ready ✅
 
-### 최근 완료 작업
-- ✅ Phase 1: 기반 구축 완료 (100%)
-- ✅ Phase 2: 클라이언트 개발 완료 (100%) 🎉
-  - Electron + React 초기화
-  - ImageProcessor 코어 로직 (TypeScript)
-  - React UI 컴포넌트 (DropZone, SettingsPanel, ProgressTracker)
-  - Main Process TypeScript 마이그레이션
-  - 병렬 처리 최적화 (MAX_CONCURRENT = 4)
-  - 실제 이미지 변환 테스트 완료
-  - 이미지 처리 기능 문서 작성
-- ✅ Phase 3: 서버 연동 완료 (100%) 🎉
-  - Phase 3-1: AuthManager, SecureStorage, SubscriptionManager 구현
-  - Phase 3-2: 로그인/회원가입 UI 구현, 구독 등급별 제한
-  - Phase 3-3: DeviceManager 구현, Edge Function 배포, 기기 인증 시스템
-  - Supabase Auth 연동 및 JWT 토큰 관리
-  - 등급별 기기 한도 (Free 1대, Basic 2대, Pro 5대)
-  - Edge Function: login-with-device-check 배포 완료
-- ✅ Phase 4: 고급 기능 완료 (100%) 🎉
-  - Phase 4-1: LogManager 구현 (Excel 기반 로그 시스템)
-  - Phase 4-2: BackupManager 구현 (파일 백업 및 복원)
-  - Phase 4-3: ImageProcessor 통합 (백업/변환/로그 자동화)
-  - Phase 4-4: LogViewer & BackupViewer UI 컴포넌트
-  - Phase 4-5: 어필리에이트 시스템 및 AffiliatePanel UI 구현
-  - 3단계 파이프라인 자동화 (백업 → 변환 → 로그)
-  - 4개 탭 네비게이션 (변환/로그/백업/어필리에이트)
+### 주요 릴리스 내용
+- ✅ **이미지 처리 엔진**: Sharp 기반 고성능 변환 (병렬 처리, 최대 3.75배 성능 향상)
+- ✅ **인증 시스템**: Supabase Auth 연동, 기기 한도 관리, 암호화 저장소
+- ✅ **구독 관리**: Free/Basic/Pro 3단계 구독, 기능별 접근 제어
+- ✅ **백업 시스템**: 자동 백업, 복원, SHA-256 무결성 검증
+- ✅ **로그 시스템**: Excel 기반 작업 로그, 통계 자동 생성
+- ✅ **어필리에이트**: 추천 코드, 쿠키 추적, 수수료 관리
+- ✅ **다국어 지원**: 한국어/영어 자동 감지 및 전환
+- ✅ **자동 업데이트**: GitHub Releases 연동, 백그라운드 업데이트
 
-자세한 진행 상황은 [task.md](task.md)를 확인하세요.
+### 완료된 Phase
+1. ✅ **Phase 1**: 기반 구축 (100%)
+2. ✅ **Phase 2**: 클라이언트 개발 (100%)
+3. ✅ **Phase 3**: 서버 연동 (100%)
+4. ✅ **Phase 4**: 고급 기능 (100%)
+5. ✅ **Phase 5**: 다국어 및 배포 (100%)
+
+### 테스트 및 검증
+- ✅ TypeScript 컴파일 검증 (0 errors)
+- ✅ 빌드 파일 자동 검증 완료
+- ✅ [TEST_REPORT.md](TEST_REPORT.md) - 빌드 검증 보고서
+- ✅ [MANUAL_TEST_GUIDE.md](MANUAL_TEST_GUIDE.md) - 사용자 수동 테스트 가이드
+
+자세한 변경 사항은 [CHANGELOG.md](CHANGELOG.md)를 확인하세요.
 
 ---
 

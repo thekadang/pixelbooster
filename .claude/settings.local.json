@@ -36,7 +36,8 @@
       "Bash(npm run build:win:*)",
       "Bash(if exist dist-electron rd /s /q dist-electron)",
       "Bash(dir:*)",
-      "Bash(nul)"
+      "Bash(nul)",
+      "Bash(test:*)"
     ],
     "deny": [],
     "ask": []
