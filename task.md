@@ -5,8 +5,8 @@
 ## 📊 프로젝트 개요
 
 - **시작일**: 2025-11-10
-- **현재 단계**: Phase 3-2 완료! 🎉 (인증 UI 구현 65%)
-- **전체 진행률**: 65%
+- **현재 단계**: Phase 3-3 완료! 🎉 (기기 인증 시스템 70%)
+- **전체 진행률**: 70%
 - **예상 완료일**: 2025-12-31
 
 ---
@@ -31,7 +31,13 @@
   - [x] App.jsx 인증 상태 관리 추가
   - [x] 인증된 사용자만 이미지 변환 가능하도록 제한
   - [x] 구독 등급별 기능 제한 UI (포맷, 배치 크기)
-- [ ] Phase 3-3 대기 중 (기기 인증 시스템)
+- [x] Phase 3-3 완료 ✅ (70%) 🎉 (기기 인증 시스템)
+  - [x] DeviceManager 서비스 구현 (기기 ID 생성 및 저장)
+  - [x] Edge Function 작성 (login-with-device-check)
+  - [x] 기기 한도 초과 처리 UI (DeviceLimitModal)
+  - [x] AuthManager와 DeviceManager 통합
+  - [x] 등급별 기기 한도: Free 1대, Basic 2대, Pro 5대
+- [ ] Phase 4 대기 중 (고급 기능)
 
 ---
 
@@ -378,9 +384,9 @@
 
 ---
 
-**마지막 업데이트**: 2025-11-10 (Phase 3-2 완료! 인증 UI 구현 🎉)
+**마지막 업데이트**: 2025-11-10 (Phase 3-3 완료! 기기 인증 시스템 🎉)
 **업데이트한 사람**: Claude Code
-**다음 업데이트 예정**: Phase 3-3 시작 (기기 인증) 시
+**다음 업데이트 예정**: Phase 4 시작 (고급 기능) 시
 
 ---
 
@@ -410,6 +416,51 @@
   client/src/App.css                            # 헤더 스타일 추가
   client/src/components/SettingsPanel.jsx       # 구독 등급별 포맷 제한
   client/src/components/SettingsPanel.css       # 구독 정보 및 업그레이드 안내 스타일
+  ```
+
+### Phase 3-3: 기기 인증 시스템 완료 ✅ 🎉
+- **DeviceManager 서비스**: 기기 고유 ID 생성 및 저장 (SHA-256 해시)
+  - 하드웨어 시리얼 + MAC 주소 + OS 정보 조합
+  - SecureStorage에 암호화 저장
+  - 기기 이름 자동 생성 (사용자 친화적)
+- **Edge Function 배포**: `login-with-device-check`
+  - Supabase Edge Functions에 성공적으로 배포 완료
+  - 함수 URL: `https://yqkfgwzbxeliusukxigy.supabase.co/functions/v1/login-with-device-check`
+  - 사용자 인증, 구독 등급 조회, 기기 한도 확인, 새 기기 등록
+- **등급별 기기 한도**: Free 1대, Basic 2대, Pro 5대
+- **기기 한도 초과 처리 UI**: DeviceLimitModal 컴포넌트
+  - 현재 등록된 기기 수 표시
+  - 해결 방법 안내 (기기 제거 / 업그레이드)
+  - 업그레이드 버튼
+- **AuthManager 통합**: 로그인 시 DeviceManager 자동 호출
+  - Edge Function 호출 (fetch API)
+  - 기기 한도 초과 에러 처리
+  - DeviceLimitModal 자동 표시
+
+자세한 구현 내용:
+- **파일 생성**:
+  ```
+  client/src/services/device-manager.ts                    # 기기 ID 생성 및 관리
+  client/src/components/DeviceLimitModal.jsx/css           # 기기 한도 초과 모달
+  supabase/functions/login-with-device-check/index.ts      # Edge Function
+  docs/development/device-manager.md                        # DeviceManager 가이드
+  docs/development/edge-function-manual-deploy.md          # 수동 배포 가이드
+  docs/development/edge-functions-deploy.md                # CLI 배포 가이드
+  supabase-deploy.bat                                      # 배포 자동화 스크립트
+  ```
+
+- **파일 수정**:
+  ```
+  client/src/services/auth-manager.ts                      # DeviceManager 통합
+  client/src/services/secure-storage.ts                    # clearDeviceId 메서드 추가
+  client/src/components/LoginForm.jsx                      # 기기 한도 처리
+  ```
+
+- **배포 완료**:
+  ```
+  ✅ Edge Function 배포 성공
+  ✅ Supabase 대시보드에서 로그 확인 가능
+  ✅ 함수 URL 활성화됨
   ```
 
 ## 💡 추가된 기능 (2025-11-10)

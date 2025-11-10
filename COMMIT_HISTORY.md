@@ -2,14 +2,14 @@
 
 > 이 파일은 자동으로 업데이트됩니다. 커밋을 선택하여 해당 시점으로 롤백할 수 있습니다.
 
-**마지막 업데이트**: 2025-11-10 19:15
+**마지막 업데이트**: 2025-11-10 20:30
 
 ---
 
 ## 📊 통계
 
-- **총 커밋 수**: 17
-- **마지막 커밋**: 2025-11-10 19:15
+- **총 커밋 수**: 18
+- **마지막 커밋**: 2025-11-10 20:30
 - **현재 브랜치**: main
 - **원격 저장소**: https://github.com/thekadang/pixelbooster.git
 
@@ -17,7 +17,87 @@
 
 ## 🔖 커밋 목록
 
-### 2025-11-10 19:15 [CURRENT] ⭐ ✅
+### 2025-11-10 20:30 [CURRENT] ⭐ 🎉 ✅
+
+**커밋 해시**: `f131a6a`
+**커밋 주제**: **Phase 3-3 완료! 기기 인증 시스템 구축 및 배포 🎉**
+
+**작성자**: thekadang
+**브랜치**: main
+
+**주요 변경사항**:
+- 🎉 **Phase 3-3 완료! 기기 인증 시스템 100%**
+
+**기기 ID 생성 및 관리**:
+- DeviceManager 서비스 구현
+  - 하드웨어 시리얼 번호 + MAC 주소 + OS 정보 조합
+  - SHA-256 해시로 기기 고유 ID 생성
+  - 암호화된 로컬 저장소 (electron-store)
+  - 기기 이름 자동 생성 (Windows PC, MacBook 등)
+
+**서버 측 검증**:
+- Edge Function: login-with-device-check 배포 완료 ✅
+  - URL: `https://yqkfgwzbxeliusukxigy.supabase.co/functions/v1/login-with-device-check`
+  - 등급별 기기 한도 검증 (Free: 1대, Basic: 2대, Pro: 5대)
+  - 기존 기기 자동 인식
+  - 새 기기 자동 등록 (한도 내)
+  - 한도 초과 시 403 에러 반환
+
+**UI 컴포넌트**:
+- DeviceLimitModal 구현
+  - 기기 한도 초과 안내
+  - 현재/최대 기기 수 표시
+  - 해결 방법 2가지 제시 (기기 제거 / 플랜 업그레이드)
+  - 등급별 업그레이드 안내
+
+**통합**:
+- AuthManager에 DeviceManager 통합
+- 로그인 시 자동 기기 검증
+- 한도 초과 시 모달 표시
+
+**배포 시스템**:
+- Scoop 패키지 매니저로 Supabase CLI 설치
+- supabase-deploy.bat 배치 스크립트 생성
+- 수동 배포 가이드 문서 작성
+- 배포 완료 및 대시보드에서 로그 확인 ✅
+
+**문서**:
+- docs/development/device-manager.md (기기 인증 완전 가이드)
+- docs/development/edge-function-manual-deploy.md (수동 배포)
+- docs/development/edge-functions-deploy.md (CLI 배포)
+
+**진행 상황**:
+- Phase 3-3 완료율: 0% → 100% 🎉
+- 전체 진행률: 65% → 70%
+- 완료 작업: 66개 → 75개
+
+**파일 변경**: 12개 (8개 신규, 4개 수정)
+```
+12 files changed
+create mode 100644 client/src/services/device-manager.ts
+create mode 100644 client/src/components/DeviceLimitModal.jsx
+create mode 100644 client/src/components/DeviceLimitModal.css
+create mode 100644 supabase/functions/login-with-device-check/index.ts
+create mode 100644 docs/development/device-manager.md
+create mode 100644 docs/development/edge-function-manual-deploy.md
+create mode 100644 docs/development/edge-functions-deploy.md
+create mode 100644 supabase-deploy.bat
+modify client/src/services/secure-storage.ts
+modify client/src/services/auth-manager.ts
+modify client/src/components/LoginForm.jsx
+modify task.md
+```
+
+**롤백 방법**:
+```bash
+git checkout <commit-hash>
+# 또는 브랜치로 롤백하고 싶으면
+git reset --hard <commit-hash>
+```
+
+---
+
+### 2025-11-10 19:15 ✅
 
 **커밋 해시**: `f92ce45`
 **작성자**: thekadang

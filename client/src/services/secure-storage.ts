@@ -135,6 +135,19 @@ class SecureStorage {
   }
 
   /**
+   * 기기 ID 삭제
+   */
+  public clearDeviceId(): void {
+    try {
+      this.store.delete('device_id');
+      console.log('기기 ID 삭제 완료');
+    } catch (error) {
+      console.error('기기 ID 삭제 실패:', error);
+      throw new Error('기기 ID 삭제에 실패했습니다.');
+    }
+  }
+
+  /**
    * 사용자 ID 저장
    */
   public setUserId(userId: string): void {

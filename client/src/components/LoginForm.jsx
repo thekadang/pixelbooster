@@ -1,5 +1,6 @@
 // LoginForm.jsx - 로그인 폼 컴포넌트
 import React, { useState } from 'react';
+import DeviceLimitModal from './DeviceLimitModal';
 import './LoginForm.css';
 
 const LoginForm = ({ onSuccess, onSwitchToSignUp }) => {
@@ -7,6 +8,7 @@ const LoginForm = ({ onSuccess, onSwitchToSignUp }) => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [deviceLimitError, setDeviceLimitError] = useState(null);
 
   /**
    * 로그인 제출 핸들러
@@ -33,8 +35,18 @@ const LoginForm = ({ onSuccess, onSwitchToSignUp }) => {
         // 로그인 성공
         onSuccess && onSuccess(result.data);
       } else {
-        // 로그인 실패
-        setError(result.error || '로그인에 실패했습니다.');
+        // 로그인 실패 - 기기 한도 초과 확인
+        if (result.error && result.error.includes('기기 한도')) {
+          // 기기 한도 초과 모달 표시
+          setDeviceLimitError({
+            tier: result.tier || 'free',
+            maxDevices: result.maxDevices || 1,
+            currentDevices: result.currentDevices || 1,
+          });
+        } else {
+          // 기타 에러
+          setError(result.error || '로그인에 실패했습니다.');
+        }
       }
     } catch (err) {
       console.error('로그인 오류:', err);
@@ -45,10 +57,11 @@ const LoginForm = ({ onSuccess, onSwitchToSignUp }) => {
   };
 
   return (
-    <div className="login-form-container">
-      <h2 className="form-title">로그인</h2>
+    <>
+      <div className="login-form-container">
+        <h2 className="form-title">로그인</h2>
 
-      <form className="login-form" onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={handleSubmit}>
         {/* 이메일 입력 */}
         <div className="form-group">
           <label htmlFor="email" className="form-label">
@@ -92,21 +105,37 @@ const LoginForm = ({ onSuccess, onSwitchToSignUp }) => {
         </button>
       </form>
 
-      {/* 회원가입 전환 */}
-      <div className="form-footer">
-        <p className="form-footer-text">
-          계정이 없으신가요?{' '}
-          <button
-            type="button"
-            className="link-button"
+        {/* 회원가입 전환 */}
+        <div className="form-footer">
+          <p className="form-footer-text">
+            계정이 없으신가요?{' '}
+            <button
+              type="button"
+              className="link-button"
             onClick={onSwitchToSignUp}
             disabled={isLoading}
           >
             회원가입
           </button>
         </p>
+        </div>
       </div>
-    </div>
+
+      {/* 기기 한도 초과 모달 */}
+      {deviceLimitError && (
+        <DeviceLimitModal
+          tier={deviceLimitError.tier}
+          maxDevices={deviceLimitError.maxDevices}
+          currentDevices={deviceLimitError.currentDevices}
+          onClose={() => setDeviceLimitError(null)}
+          onUpgrade={() => {
+            // 업그레이드 페이지로 이동
+            window.open('https://pixelbooster.com/upgrade', '_blank');
+            setDeviceLimitError(null);
+          }}
+        />
+      )}
+    </>
   );
 };
 

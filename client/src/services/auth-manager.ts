@@ -14,6 +14,7 @@
  */
 
 import { createClient, SupabaseClient, Session, User } from '@supabase/supabase-js';
+import DeviceManager from './device-manager';
 
 // Result 타입 패턴
 type Result<T> =
@@ -135,40 +136,78 @@ class AuthManager {
   }
 
   /**
-   * 로그인
+   * 로그인 (기기 인증 포함)
    *
    * @param credentials - 이메일/비밀번호
    * @returns Result<Session>
    */
   public async signIn(credentials: AuthCredentials): Promise<Result<Session>> {
     try {
-      const { data, error } = await this.supabase.auth.signInWithPassword({
-        email: credentials.email,
-        password: credentials.password,
+      // 1. 기기 ID 및 이름 가져오기
+      const deviceId = await DeviceManager.getDeviceId();
+      const deviceName = DeviceManager.generateDeviceName();
+
+      console.log('[AuthManager] Device info:', { deviceId, deviceName });
+
+      // 2. Edge Function 호출 (login-with-device-check)
+      const supabaseUrl = process.env.SUPABASE_URL!;
+      const edgeFunctionUrl = `${supabaseUrl}/functions/v1/login-with-device-check`;
+
+      const response = await fetch(edgeFunctionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          email: credentials.email,
+          password: credentials.password,
+          deviceId,
+          deviceName,
+        }),
       });
 
-      if (error) {
-        // 에러 메시지 한글화
-        const errorMessage = this.translateAuthError(error.message);
+      const result: any = await response.json();
+
+      if (!response.ok) {
+        // 에러 처리
+        if (result.error === 'Device limit exceeded') {
+          // 기기 한도 초과
+          return {
+            success: false,
+            error: result.message || '기기 한도를 초과했습니다.',
+          };
+        }
+
+        // 기타 에러
+        const errorMessage = this.translateAuthError(result.message || result.error);
         return { success: false, error: errorMessage };
       }
 
-      if (!data.session) {
-        return { success: false, error: '세션 생성에 실패했습니다.' };
+      // 3. 성공 - 세션 설정
+      const { token, refresh_token, user, subscription, device } = result;
+
+      // Supabase 세션 설정
+      const { data: sessionData, error: sessionError } = await this.supabase.auth.setSession({
+        access_token: token,
+        refresh_token: refresh_token,
+      });
+
+      if (sessionError || !sessionData.session) {
+        console.error('[AuthManager] Session setting failed:', sessionError);
+        return { success: false, error: '세션 설정에 실패했습니다.' };
       }
 
-      // 이메일 인증 확인
-      if (!data.user.email_confirmed_at) {
-        return {
-          success: false,
-          error: '이메일 인증이 필요합니다. 이메일을 확인해주세요.',
-        };
-      }
+      console.log('[AuthManager] Login successful:', {
+        email: user.email,
+        tier: subscription.tier,
+        deviceId: device.deviceId,
+        isNewDevice: device.isNew,
+      });
 
-      console.log('로그인 성공:', data.user.email);
-      return { success: true, data: data.session };
+      return { success: true, data: sessionData.session };
     } catch (error: any) {
-      console.error('로그인 에러:', error);
+      console.error('[AuthManager] Login error:', error);
       return {
         success: false,
         error: `로그인 실패: ${error.message}`,

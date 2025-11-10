@@ -1,0 +1,307 @@
+/* client/src/components/DeviceLimitModal.css */
+
+.device-limit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.device-limit-modal {
+  background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+  border: 2px solid rgba(147, 51, 234, 0.3);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(147, 51, 234, 0.4),
+              0 0 40px rgba(147, 51, 234, 0.2);
+  animation: slideUp 0.3s ease-out;
+}
+
+/* 헤더 */
+.device-limit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 1px solid rgba(147, 51, 234, 0.2);
+  position: sticky;
+  top: 0;
+  background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+  z-index: 10;
+}
+
+.device-limit-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.close-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  transform: rotate(90deg);
+}
+
+/* 콘텐츠 */
+.device-limit-content {
+  padding: 30px;
+}
+
+.limit-message {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #e5e7eb;
+  margin-bottom: 25px;
+  text-align: center;
+  padding: 20px;
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid #ef4444;
+  border-radius: 10px;
+}
+
+.limit-message strong {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* 기기 정보 */
+.device-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(147, 51, 234, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(147, 51, 234, 0.2);
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.info-item .label {
+  color: #9ca3af;
+}
+
+.info-item .value {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* 해결 방법 */
+.solutions {
+  margin-top: 30px;
+}
+
+.solutions h3 {
+  margin: 0 0 20px 0;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.solution-option {
+  padding: 20px;
+  margin-bottom: 20px;
+  background: rgba(147, 51, 234, 0.08);
+  border-radius: 12px;
+  border: 1px solid rgba(147, 51, 234, 0.2);
+  transition: all 0.3s;
+}
+
+.solution-option:hover {
+  background: rgba(147, 51, 234, 0.12);
+  border-color: rgba(147, 51, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+.solution-option h4 {
+  margin: 0 0 10px 0;
+  color: #a78bfa;
+  font-size: 1.1rem;
+}
+
+.solution-option p {
+  color: #d1d5db;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.link-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: rgba(147, 51, 234, 0.2);
+  color: #a78bfa;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.link-btn:hover {
+  background: rgba(147, 51, 234, 0.3);
+  color: #c4b5fd;
+  transform: translateX(3px);
+}
+
+/* 업그레이드 옵션 */
+.upgrade-option {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(79, 70, 229, 0.1) 100%);
+  border-color: rgba(147, 51, 234, 0.4);
+}
+
+.upgrade-option:hover {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(79, 70, 229, 0.15) 100%);
+  border-color: rgba(147, 51, 234, 0.6);
+}
+
+.upgrade-btn {
+  display: block;
+  width: 100%;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+}
+
+.upgrade-btn:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(147, 51, 234, 0.4);
+}
+
+.upgrade-btn:active {
+  transform: translateY(0);
+}
+
+/* 푸터 */
+.device-limit-footer {
+  padding: 20px 30px;
+  border-top: 1px solid rgba(147, 51, 234, 0.2);
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+}
+
+.secondary-btn {
+  padding: 12px 24px;
+  background: rgba(147, 51, 234, 0.1);
+  color: #a78bfa;
+  border: 1px solid rgba(147, 51, 234, 0.3);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.secondary-btn:hover {
+  background: rgba(147, 51, 234, 0.2);
+  border-color: rgba(147, 51, 234, 0.5);
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 스크롤바 스타일 */
+.device-limit-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.device-limit-modal::-webkit-scrollbar-track {
+  background: rgba(147, 51, 234, 0.1);
+  border-radius: 10px;
+}
+
+.device-limit-modal::-webkit-scrollbar-thumb {
+  background: rgba(147, 51, 234, 0.5);
+  border-radius: 10px;
+}
+
+.device-limit-modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(147, 51, 234, 0.7);
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+  .device-limit-modal {
+    width: 95%;
+    max-width: none;
+  }
+
+  .device-limit-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .device-limit-content {
+    padding: 20px;
+  }
+
+  .solution-option {
+    padding: 15px;
+  }
+}
