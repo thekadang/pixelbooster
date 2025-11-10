@@ -5,8 +5,8 @@
 ## 📊 프로젝트 개요
 
 - **시작일**: 2025-11-10
-- **현재 단계**: Phase 4-1 완료! 🎉 (LogManager 구현 75%)
-- **전체 진행률**: 75%
+- **현재 단계**: Phase 4-2 완료! 🎉 (BackupManager 구현 80%)
+- **전체 진행률**: 80%
 - **예상 완료일**: 2025-12-31
 
 ---
@@ -42,8 +42,13 @@
   - [x] IPC 핸들러 추가 (로그 관리)
   - [x] 타입 정의 추가 (LogEntry, LogIndex)
   - [x] exceljs 패키지 설치
-  - [ ] BackupManager 구현 대기
+- [x] Phase 4-2 완료 ✅ (80%) 🎉 (BackupManager 구현)
+  - [x] BackupManager 서비스 구현 (파일 백업 및 복원)
+  - [x] IPC 핸들러 추가 (백업 관리)
+  - [x] 타입 정의 확인 (BackupInfo, BackupFilters 등)
+  - [x] TypeScript 컴파일 성공
   - [ ] ImageProcessor 로그 통합 대기
+  - [ ] ImageProcessor 백업 통합 대기
 
 ---
 
@@ -249,7 +254,7 @@
 
 ---
 
-### Phase 4: 고급 기능 (2-3주) - 🔄 진행 중 (25% 완료)
+### Phase 4: 고급 기능 (2-3주) - 🔄 진행 중 (50% 완료)
 
 - [x] 로그 시스템 (Phase 4-1 완료 ✅)
   - [x] LogManager 구현
@@ -260,11 +265,14 @@
   - [ ] ImageProcessor 통합 (자동 로그)
   - [ ] UI 컴포넌트 (LogViewer)
 
-- [ ] 백업 시스템 (대기 중)
-  - [ ] BackupManager 구현
-  - [ ] backup 폴더 생성
-  - [ ] 파일 이동 로직
-  - [ ] IPC 핸들러 추가
+- [x] 백업 시스템 (Phase 4-2 완료 ✅)
+  - [x] BackupManager 구현
+  - [x] backup 폴더 생성
+  - [x] 파일 복사/복원 로직
+  - [x] IPC 핸들러 추가
+  - [x] 메타데이터 관리
+  - [ ] ImageProcessor 통합 (자동 백업)
+  - [ ] UI 컴포넌트 (BackupViewer)
 
 - [ ] 어필리에이트 시스템
   - [ ] 추천 코드 생성
@@ -365,8 +373,8 @@
 - **Phase 1 완료율**: 100% ✅
 - **Phase 2 완료율**: 100% ✅ 🎉
 - **Phase 3 완료율**: 100% ✅ 🎉
-- **Phase 4 완료율**: 25% (LogManager 완료)
-- **전체 진행률**: 75%
+- **Phase 4 완료율**: 50% (LogManager, BackupManager 완료)
+- **전체 진행률**: 80%
 
 ---
 
@@ -390,9 +398,9 @@
 
 ---
 
-**마지막 업데이트**: 2025-11-10 (Phase 4-1 완료! LogManager 구현 🎉)
+**마지막 업데이트**: 2025-11-10 (Phase 4-2 완료! BackupManager 구현 🎉)
 **업데이트한 사람**: Claude Code
-**다음 업데이트 예정**: Phase 4-2 시작 (BackupManager) 시
+**다음 업데이트 예정**: Phase 4-3 시작 (ImageProcessor 통합) 시
 
 ---
 
@@ -678,6 +686,51 @@
   client/src/types/ipc.ts                              # LOG_*, BACKUP_* IPC 채널 추가
   client/main.ts                                       # LogManager IPC 핸들러 4개 추가
   package.json                                         # exceljs, uuid 패키지 추가
+  ```
+
+- **TypeScript 컴파일**: 성공 ✅
+- **개발 서버**: 정상 실행 중 ✅
+
+### Phase 4-2: BackupManager 구현 완료 ✅ 🎉
+- **BackupManager 서비스**: 파일 백업 및 복원 시스템 (TypeScript)
+  - backupFile(): 단일 파일 백업 (SHA-256 해시, 메타데이터 생성)
+  - backupBatch(): 배치 파일 백업 (순차 처리, 진행 상태 추적)
+  - restoreFile(): 단일 파일 복원 (원본 또는 지정 경로)
+  - restoreBatch(): 배치 파일 복원 (순차 처리, 진행 상태 추적)
+  - listBackups(): 백업 목록 조회 (필터링, 정렬 지원)
+  - deleteBackup(): 백업 삭제 (메타데이터 및 파일 삭제)
+- **백업 폴더 구조**:
+  - backup/YYYY-MM-DD/ (날짜별 폴더)
+  - {filename}_{timestamp}.{ext} (백업 파일)
+  - {filename}_{timestamp}.{ext}.json (메타데이터)
+  - metadata_index.json (전체 백업 인덱스)
+- **메타데이터 관리**:
+  - BackupInfo: backupId, originalPath, backupPath, fileSize, hash, status 등
+  - BackupIndex: 전체 백업 통계 및 목록
+  - BackupStatus: 'active' | 'restored' | 'deleted'
+- **IPC 통신 추가**:
+  - BACKUP_FILE: 'backup:file'
+  - BACKUP_BATCH: 'backup:batch'
+  - BACKUP_RESTORE: 'backup:restore'
+  - BACKUP_RESTORE_BATCH: 'backup:restore-batch'
+  - BACKUP_LIST: 'backup:list'
+  - BACKUP_DELETE: 'backup:delete'
+- **패키지**: uuid (이미 설치됨, LogManager에서 사용)
+- **문서 참고**:
+  - docs/features/backup-system.md: 백업 시스템 기능 명세 (기존)
+  - docs/development/backup-manager.md: BackupManager 개발 가이드 (기존)
+
+자세한 구현 내용:
+- **파일 생성**:
+  ```
+  client/src/services/backup-manager.ts                   # BackupManager 서비스 (770 lines)
+  ```
+
+- **파일 수정**:
+  ```
+  client/main.ts                                           # BackupManager IPC 핸들러 6개 추가
+  client/src/types/index.ts                                # BackupInfo 등 타입 (이미 정의됨)
+  client/src/types/ipc.ts                                  # BACKUP_* IPC 채널 (이미 정의됨)
   ```
 
 - **TypeScript 컴파일**: 성공 ✅

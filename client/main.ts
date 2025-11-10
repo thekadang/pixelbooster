@@ -25,6 +25,7 @@ import { imageProcessor } from './src/services/image-processor';
 import { authManager } from './src/services/auth-manager';
 import { subscriptionManager } from './src/services/subscription-manager';
 import { LogManager } from './src/services/log-manager';
+import { BackupManager } from './src/services/backup-manager';
 
 // 개발 환경 판단
 const isDevelopment: boolean = isDev;
@@ -499,6 +500,92 @@ function setupIpcHandlers(): void {
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
         return { success: false, error: `Excel 내보내기 실패: ${errorMessage}` };
+      }
+    }
+  );
+
+  // ===== 백업 관리 IPC 핸들러 =====
+
+  // BackupManager 인스턴스 생성
+  const backupManager = new BackupManager();
+
+  // 단일 파일 백업
+  ipcMain.handle(IPC_CHANNELS.BACKUP_FILE, async (_event: IpcMainInvokeEvent, filePath: string) => {
+    try {
+      const result = await backupManager.backupFile(filePath);
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+      return { success: false, error: `파일 백업 실패: ${errorMessage}` };
+    }
+  });
+
+  // 배치 파일 백업
+  ipcMain.handle(IPC_CHANNELS.BACKUP_BATCH, async (_event: IpcMainInvokeEvent, files: string[]) => {
+    try {
+      const result = await backupManager.backupBatch(files, (progress) => {
+        // 진행 상태를 Renderer로 전송
+        _event.sender.send('backup-progress', progress);
+      });
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+      return { success: false, error: `배치 백업 실패: ${errorMessage}` };
+    }
+  });
+
+  // 파일 복원
+  ipcMain.handle(
+    IPC_CHANNELS.BACKUP_RESTORE,
+    async (_event: IpcMainInvokeEvent, backupId: string, targetPath?: string) => {
+      try {
+        const result = await backupManager.restoreFile(backupId, targetPath);
+        return result;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        return { success: false, error: `파일 복원 실패: ${errorMessage}` };
+      }
+    }
+  );
+
+  // 배치 파일 복원
+  ipcMain.handle(
+    IPC_CHANNELS.BACKUP_RESTORE_BATCH,
+    async (_event: IpcMainInvokeEvent, backupIds: string[]) => {
+      try {
+        const result = await backupManager.restoreBatch(backupIds, (progress) => {
+          // 진행 상태를 Renderer로 전송
+          _event.sender.send('backup-restore-progress', progress);
+        });
+        return result;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        return { success: false, error: `배치 복원 실패: ${errorMessage}` };
+      }
+    }
+  );
+
+  // 백업 목록 조회
+  ipcMain.handle(IPC_CHANNELS.BACKUP_LIST, async (_event: IpcMainInvokeEvent, filters?: any) => {
+    try {
+      const result = await backupManager.listBackups(filters);
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+      return { success: false, error: `백업 목록 조회 실패: ${errorMessage}` };
+    }
+  });
+
+  // 백업 삭제
+  ipcMain.handle(
+    IPC_CHANNELS.BACKUP_DELETE,
+    async (_event: IpcMainInvokeEvent, backupId: string) => {
+      try {
+        const result = await backupManager.deleteBackup(backupId);
+        return result;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        return { success: false, error: `백업 삭제 실패: ${errorMessage}` };
       }
     }
   );
