@@ -2,14 +2,14 @@
 
 > 이 파일은 자동으로 업데이트됩니다. 커밋을 선택하여 해당 시점으로 롤백할 수 있습니다.
 
-**마지막 업데이트**: 2025-11-10 22:30
+**마지막 업데이트**: 2025-11-10 23:38
 
 ---
 
 ## 📊 통계
 
-- **총 커밋 수**: 34
-- **마지막 커밋**: 2025-11-10 23:00
+- **총 커밋 수**: 35
+- **마지막 커밋**: 2025-11-10 23:38
 - **현재 브랜치**: main
 - **원격 저장소**: https://github.com/thekadang/pixelbooster.git
 
@@ -17,7 +17,67 @@
 
 ## 🔖 커밋 목록
 
-### 2025-11-10 23:00 [CURRENT] ⭐ 🎉 ✅
+### 2025-11-10 23:38 [CURRENT] ⭐ 🎉 ✅
+
+**커밋 해시**: `c6152b3`
+**커밋 주제**: **Phase 5-1 완료 - 자동 업데이트 시스템 구축 (electron-updater)**
+
+**작성자**: thekadang
+**브랜치**: main
+
+**주요 변경사항**:
+- 🎉 **Phase 5-1 완료! 자동 업데이트 시스템 구축 100% (전체 98% 진행)**
+
+**1. Main Process autoUpdater 통합** (client/main.ts - 130+ lines):
+- setupAutoUpdater() 함수 구현
+- 이벤트 핸들러: checking-for-update, update-available, update-not-available, download-progress, update-downloaded, error
+- IPC 핸들러 4개: update:check, update:download, update:install, update:get-version
+- 개발 환경 감지 및 안전 처리
+- 프로덕션 환경 5초 후 자동 업데이트 확인
+
+**2. Preload Script API 노출** (client/preload.ts):
+- window.autoUpdate API 구현
+- 6개 메서드: checkForUpdates, downloadUpdate, installUpdate, getCurrentVersion
+- 6개 이벤트 리스너: onUpdateChecking, onUpdateAvailable, onUpdateNotAvailable, onDownloadProgress, onUpdateDownloaded, onUpdateError
+- TypeScript 타입 선언 완료
+
+**3. GitHub Releases 통합** (package.json):
+- publish 설정 추가 (provider: github)
+- 4개 배포 스크립트: publish:win, publish:mac, publish:linux, publish:all
+- Mac 빌드 타겟 업데이트 (dmg + zip)
+
+**4. 타입 시스템 확장** (client/src/types/ipc.ts):
+- UPDATE_* IPC 채널 10개 추가
+- UpdateInfo, UpdateDownloadProgress 인터페이스
+
+**5. 문서화**:
+- docs/deployment/auto-update.md: 완전 가이드 (560+ lines)
+- docs/deployment/build-process.md: 빌드 프로세스 문서
+- docs/features/i18n-system.md: 다국어 시스템 설계
+
+**업데이트 전략**:
+- autoDownload: false (사용자 확인 후 다운로드)
+- autoInstallOnAppQuit: true (앱 종료 시 자동 설치)
+- 개발 환경: 업데이트 완전 비활성화
+- 프로덕션: 5초 후 자동 확인 → 발견 시 Renderer 이벤트 전송
+
+**검증 완료**:
+- ✅ TypeScript 컴파일: 0 errors
+- ✅ 개발 서버: 정상 실행 중
+
+**진행 상황**:
+- Phase 5 완료율: 0% → 50% 🟡
+- 전체 진행률: 97% → 98%
+- 다음 단계: 다국어 지원 (i18next) 또는 빌드/패키징
+
+**롤백 방법**:
+```bash
+git checkout c6152b3
+```
+
+---
+
+### 2025-11-10 23:00 🎉 ✅
 
 **커밋 해시**: `081a8de`
 **커밋 주제**: **Phase 4 완료 - 어필리에이트 UI 구현 완료 (AffiliatePanel)**
