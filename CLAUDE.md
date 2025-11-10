@@ -15,8 +15,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 1단계: 프로젝트 상태 파악
 ```
 1. COMMIT_HISTORY.md 확인 - 최근 커밋 및 작업 이력
-2. task.md 확인 - 현재 진행 단계 (Phase 5 완료! 100% 완료 🎉)
-3. 다음 작업: 통합 테스트 및 배포 준비 완료 ✅
+2. task.md 확인 - 현재 진행 단계 (Phase 5 완료! 빌드 검증 완료 ✅)
+3. 다음 작업: 수동 테스트 진행 (MANUAL_TEST_GUIDE.md 참고)
+4. 테스트 보고서: TEST_REPORT.md 확인
 ```
 
 ### 2단계: 개발 명령어
@@ -56,6 +57,9 @@ docs/     - 전체 기술 문서
 ## 📋 프로젝트 상태
 
 - **[진행 상황 및 작업 계획](task.md)** - 현재 작업 및 다음 단계 확인
+- **[테스트 보고서](TEST_REPORT.md)** - 빌드 검증 결과 및 수동 테스트 체크리스트
+- **[수동 테스트 가이드](MANUAL_TEST_GUIDE.md)** - 사용자 수동 테스트 상세 가이드 (8개 Phase)
+- **[작업 완료 보고서](COMPLETION_SUMMARY.md)** - 빌드 검증 완료 및 다음 단계 가이드
 
 ---
 
@@ -163,7 +167,12 @@ docs/     - 전체 기술 문서
 ### 2단계: 현재 작업 확인
 [task.md](task.md)에서 현재 진행 중인 작업과 다음 단계를 확인하세요.
 
-### 3단계: 기능별 문서 참고
+### 3단계: 테스트 진행 (현재 단계)
+- [TEST_REPORT.md](TEST_REPORT.md) - 빌드 검증 결과 확인
+- [MANUAL_TEST_GUIDE.md](MANUAL_TEST_GUIDE.md) - 수동 테스트 가이드 따라가기
+- [COMPLETION_SUMMARY.md](COMPLETION_SUMMARY.md) - 작업 완료 보고서
+
+### 4단계: 기능별 문서 참고
 개발할 기능에 해당하는 문서를 찾아 상세 구현 가이드를 따르세요.
 
 ---
@@ -184,5 +193,5 @@ docs/     - 전체 기술 문서
 
 ---
 
-**마지막 업데이트**: 2025-11-10
-**프로젝트 버전**: v0.1.0 (초기 구축 단계)
+**마지막 업데이트**: 2025-11-11
+**프로젝트 버전**: v0.1.0 (빌드 검증 완료, 수동 테스트 단계)
