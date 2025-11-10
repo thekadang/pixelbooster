@@ -1,6 +1,44 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+---
+
 # 더카당 픽셀부스터 - 개발 가이드 (Hub)
 
 이 문서는 픽셀부스터 프로젝트의 중앙 허브로서, 모든 설계 문서와 개발 가이드를 연결합니다.
+
+---
+
+## 🚀 빠른 시작 (새 세션 시작 시)
+
+### 1단계: 프로젝트 상태 파악
+```
+1. COMMIT_HISTORY.md 확인 - 최근 커밋 및 작업 이력
+2. task.md 확인 - 현재 진행 단계 (Phase 1: 기반 구축 60% 완료)
+3. 다음 작업: Supabase 프로젝트 생성 → Electron 초기화
+```
+
+### 2단계: 개발 명령어
+```bash
+# Git 자동 커밋 (Claude Code에게 말하기)
+"커밋해줘" 또는 "변경사항 저장해줘"
+
+# 롤백
+"<commit-hash>로 롤백해줘"
+
+# 커밋 히스토리 확인
+"COMMIT_HISTORY.md 열어줘"
+```
+
+### 3단계: 프로젝트 구조 이해
+```
+client/   - Electron 데스크톱 앱 (이미지 처리 로직)
+server/   - Supabase Edge Functions (인증, 구독 관리)
+admin/    - 관리자 대시보드 (사용자/수익 관리)
+shared/   - 공통 타입 및 유틸리티
+docs/     - 전체 기술 문서
+```
 
 ---
 
