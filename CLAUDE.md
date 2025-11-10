@@ -15,8 +15,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 1단계: 프로젝트 상태 파악
 ```
 1. COMMIT_HISTORY.md 확인 - 최근 커밋 및 작업 이력
-2. task.md 확인 - 현재 진행 단계 (Phase 1: 기반 구축 60% 완료)
-3. 다음 작업: Supabase 프로젝트 생성 → Electron 초기화
+2. task.md 확인 - 현재 진행 단계 (Phase 3 완료! 70% 진행)
+3. 다음 작업: Phase 4 (고급 기능) - LogManager, BackupManager, 어필리에이트 등
 ```
 
 ### 2단계: 개발 명령어

@@ -130,8 +130,8 @@ npm run dev
 
 ## 🔄 개발 진행 상황
 
-**현재 단계**: Phase 3-1 완료! 🎉 (서버 연동 준비)
-**진행률**: 60%
+**현재 단계**: Phase 3 완료! 🎉 (서버 연동)
+**진행률**: 70%
 
 ### 최근 완료 작업
 - ✅ Phase 1: 기반 구축 완료 (100%)
@@ -143,12 +143,13 @@ npm run dev
   - 병렬 처리 최적화 (MAX_CONCURRENT = 4)
   - 실제 이미지 변환 테스트 완료
   - 이미지 처리 기능 문서 작성
-- ✅ Phase 3-1: 서버 연동 준비 완료 (100%) 🎉
-  - AuthManager 서비스 구현 (Supabase Auth 연동)
-  - SecureStorage 서비스 구현 (암호화된 로컬 저장소)
-  - SubscriptionManager 서비스 구현 (구독 등급 관리)
-  - IPC 핸들러 추가 (인증/구독 채널)
-  - 환경 변수 설정 완료
+- ✅ Phase 3: 서버 연동 완료 (100%) 🎉
+  - Phase 3-1: AuthManager, SecureStorage, SubscriptionManager 구현
+  - Phase 3-2: 로그인/회원가입 UI 구현, 구독 등급별 제한
+  - Phase 3-3: DeviceManager 구현, Edge Function 배포, 기기 인증 시스템
+  - Supabase Auth 연동 및 JWT 토큰 관리
+  - 등급별 기기 한도 (Free 1대, Basic 2대, Pro 5대)
+  - Edge Function: login-with-device-check 배포 완료
 
 자세한 진행 상황은 [task.md](task.md)를 확인하세요.
 
