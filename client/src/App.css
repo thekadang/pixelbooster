@@ -131,6 +131,47 @@ body {
   color: #333;
 }
 
+/* 탭 네비게이션 */
+.tab-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tab-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.tab-button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.tab-icon {
+  font-size: 20px;
+}
+
 /* 메인 컨텐츠 */
 .app-main {
   flex: 1;
@@ -256,6 +297,17 @@ body {
 @media (max-width: 768px) {
   .app-header {
     padding: 20px 24px;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .header-left,
+  .header-right {
+    width: 100%;
+  }
+
+  .header-right {
+    justify-content: center;
   }
 
   .app-title {
@@ -268,6 +320,21 @@ body {
 
   .app-subtitle {
     font-size: 14px;
+  }
+
+  .tab-navigation {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .tab-button {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .tab-icon {
+    font-size: 18px;
   }
 
   .app-main {

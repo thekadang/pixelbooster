@@ -4,9 +4,14 @@ import DropZone from './components/DropZone';
 import SettingsPanel from './components/SettingsPanel';
 import ProgressTracker from './components/ProgressTracker';
 import AuthModal from './components/AuthModal';
+import LogViewer from './components/LogViewer';
+import BackupViewer from './components/BackupViewer';
 import './App.css';
 
 const App = () => {
+  // 탭 상태
+  const [activeTab, setActiveTab] = useState('converter');
+
   // 파일 및 처리 상태
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [processOptions, setProcessOptions] = useState({
@@ -290,41 +295,85 @@ const App = () => {
         </div>
       </header>
 
+      {/* 탭 네비게이션 */}
+      <nav className="tab-navigation">
+        <button
+          className={`tab-button ${activeTab === 'converter' ? 'active' : ''}`}
+          onClick={() => setActiveTab('converter')}
+        >
+          <span className="tab-icon">🚀</span>
+          변환
+        </button>
+        <button
+          className={`tab-button ${activeTab === 'logs' ? 'active' : ''}`}
+          onClick={() => setActiveTab('logs')}
+        >
+          <span className="tab-icon">📊</span>
+          로그
+        </button>
+        <button
+          className={`tab-button ${activeTab === 'backups' ? 'active' : ''}`}
+          onClick={() => setActiveTab('backups')}
+        >
+          <span className="tab-icon">💾</span>
+          백업
+        </button>
+      </nav>
+
       {/* 메인 컨텐츠 */}
       <main className="app-main">
-        {/* 파일 선택 영역 */}
-        <section className="section">
-          <DropZone onFilesSelected={handleFilesSelected} />
-        </section>
+        {/* 변환 탭 */}
+        {activeTab === 'converter' && (
+          <>
+            {/* 파일 선택 영역 */}
+            <section className="section">
+              <DropZone onFilesSelected={handleFilesSelected} />
+            </section>
 
-        {/* 설정 패널 */}
-        {selectedFiles.length > 0 && (
+            {/* 설정 패널 */}
+            {selectedFiles.length > 0 && (
+              <section className="section">
+                <SettingsPanel
+                  options={processOptions}
+                  onOptionsChange={handleOptionsChange}
+                  subscription={subscription}
+                />
+
+                <div className="action-buttons">
+                  <button
+                    className="start-button"
+                    onClick={handleStartConversion}
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? '🔄 변환 중...' : '🚀 변환 시작'}
+                  </button>
+                </div>
+              </section>
+            )}
+
+            {/* 진행 상태 추적 */}
+            {progress && (
+              <section className="section">
+                <ProgressTracker
+                  progress={progress}
+                  onCancel={isProcessing ? handleCancelConversion : null}
+                />
+              </section>
+            )}
+          </>
+        )}
+
+        {/* 로그 탭 */}
+        {activeTab === 'logs' && (
           <section className="section">
-            <SettingsPanel
-              options={processOptions}
-              onOptionsChange={handleOptionsChange}
-              subscription={subscription}
-            />
-
-            <div className="action-buttons">
-              <button
-                className="start-button"
-                onClick={handleStartConversion}
-                disabled={isProcessing}
-              >
-                {isProcessing ? '🔄 변환 중...' : '🚀 변환 시작'}
-              </button>
-            </div>
+            <LogViewer />
           </section>
         )}
 
-        {/* 진행 상태 추적 */}
-        {progress && (
+        {/* 백업 탭 */}
+        {activeTab === 'backups' && (
           <section className="section">
-            <ProgressTracker
-              progress={progress}
-              onCancel={isProcessing ? handleCancelConversion : null}
-            />
+            <BackupViewer />
           </section>
         )}
       </main>
