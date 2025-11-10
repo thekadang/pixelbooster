@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 1단계: 프로젝트 상태 파악
 ```
 1. COMMIT_HISTORY.md 확인 - 최근 커밋 및 작업 이력
-2. task.md 확인 - 현재 진행 단계 (Phase 4-5 완료! 95% 진행)
+2. task.md 확인 - 현재 진행 단계 (Phase 4 완료! 97% 진행)
 3. 다음 작업: Phase 5 진입 (다국어 지원, 자동 업데이트, 배포 준비)
 ```
 
