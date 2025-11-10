@@ -24,20 +24,24 @@
 
 ### Free (무료)
 - ✅ **무제한 변환**: 횟수 제한 없음
-- ✅ **WEBP 변환**: JPG/PNG → WEBP 변환
+- ✅ **WEBP 변환**: 다양한 포맷 → WEBP
+  - 입력: JPG, PNG, GIF, BMP, TIFF, SVG
 - ✅ **파일 선택**: 다중 파일 선택 가능
 - ✅ **다국어 지원**: 한국어, 영어
 
 ### Basic (베이직)
 - ✅ Free 기능 전체
-- ✅ **AVIF 지원**: WEBP + AVIF 포맷
+- ✅ **AVIF 지원**: 다양한 포맷 → WEBP/AVIF
+  - 추가 입력: HEIF, AVIF
 - ✅ **폴더 선택**: 하위 폴더 포함 가능
 - ✅ **백업 기능**: 원본 파일 자동 백업
 - ✅ **로그 기록**: Excel 작업 로그
 
 ### Pro (프로)
 - ✅ Basic 기능 전체
-- ✅ **모든 포맷**: JPG, PNG, GIF, BMP, TIFF, WEBP, AVIF 상호 변환
+- ✅ **모든 포맷 상호 변환**:
+  - 입력: JPG, PNG, GIF, BMP, TIFF, SVG, WEBP, AVIF, HEIF
+  - 출력: JPG, PNG, GIF, WEBP, AVIF, TIFF
 - ✅ **컴퓨터 전체**: 드라이브 전체 스캔 및 변환
 
 ---
