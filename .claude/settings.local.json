@@ -37,7 +37,9 @@
       "Bash(if exist dist-electron rd /s /q dist-electron)",
       "Bash(dir:*)",
       "Bash(nul)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(git tag:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

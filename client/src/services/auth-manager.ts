@@ -153,6 +153,8 @@ class AuthManager {
       const supabaseUrl = process.env.SUPABASE_URL!;
       const edgeFunctionUrl = `${supabaseUrl}/functions/v1/login-with-device-check`;
 
+      console.log('[AuthManager] Calling Edge Function:', edgeFunctionUrl);
+
       const response = await fetch(edgeFunctionUrl, {
         method: 'POST',
         headers: {
@@ -167,10 +169,30 @@ class AuthManager {
         }),
       });
 
-      const result: any = await response.json();
+      console.log('[AuthManager] Edge Function response status:', response.status);
+
+      // 응답 본문 파싱 시도
+      let result: any;
+      try {
+        result = await response.json();
+        console.log('[AuthManager] Edge Function result:', result);
+      } catch (parseError) {
+        console.error('[AuthManager] Failed to parse response:', parseError);
+        return {
+          success: false,
+          error: `서버 응답 파싱 실패 (상태: ${response.status})`,
+        };
+      }
 
       if (!response.ok) {
         // 에러 처리
+        console.error('[AuthManager] Edge Function error:', {
+          status: response.status,
+          error: result.error,
+          message: result.message,
+          details: result.details,
+        });
+
         if (result.error === 'Device limit exceeded') {
           // 기기 한도 초과
           return {
@@ -179,9 +201,14 @@ class AuthManager {
           };
         }
 
-        // 기타 에러
-        const errorMessage = this.translateAuthError(result.message || result.error);
-        return { success: false, error: errorMessage };
+        // 기타 에러 - 더 상세한 메시지 제공
+        const errorMessage = result.message || result.error || '로그인에 실패했습니다.';
+        const errorDetails = result.details ? `\n상세: ${result.details}` : '';
+
+        return {
+          success: false,
+          error: `${this.translateAuthError(errorMessage)}${errorDetails}`
+        };
       }
 
       // 3. 성공 - 세션 설정
@@ -208,9 +235,19 @@ class AuthManager {
       return { success: true, data: sessionData.session };
     } catch (error: any) {
       console.error('[AuthManager] Login error:', error);
+
+      // 네트워크 오류 판별
+      if (error.message && error.message.includes('fetch')) {
+        return {
+          success: false,
+          error: '서버에 연결할 수 없습니다. 인터넷 연결을 확인하세요.',
+        };
+      }
+
+      // 기타 오류
       return {
         success: false,
-        error: `로그인 실패: ${error.message}`,
+        error: `기기 등록 실패: ${error.message || '알 수 없는 오류'}`,
       };
     }
   }

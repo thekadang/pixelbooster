@@ -32,6 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "@supabase/supabase-js": "^2.80.0",
+    "dotenv": "^17.2.3",
     "electron-store": "^11.0.2",
     "electron-updater": "^6.6.2",
     "exceljs": "^4.4.0",
@@ -54,7 +55,6 @@
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
     "css-loader": "^7.1.2",
-    "dotenv": "^17.2.3",
     "dotenv-webpack": "^8.1.1",
     "electron": "^39.1.1",
     "electron-builder": "^26.0.12",
@@ -74,6 +74,12 @@
   "build": {
     "appId": "com.thekadang.pixelbooster",
     "productName": "픽셀부스터",
+    "protocols": [
+      {
+        "name": "pixelbooster",
+        "schemes": ["pixelbooster"]
+      }
+    ],
     "directories": {
       "buildResources": "build",
       "output": "dist-electron"
@@ -84,7 +90,8 @@
       "client/preload.js",
       "client/src/**/*.js",
       "node_modules/**/*",
-      "package.json"
+      "package.json",
+      ".env"
     ],
     "publish": [
       {

@@ -3,9 +3,25 @@
  * Electron 앱의 진입점으로 BrowserWindow 생성 및 라이프사이클 관리
  */
 
+// ⚠️ CRITICAL: dotenv를 가장 먼저 로드 (다른 import보다 먼저!)
+// 프로덕션 빌드에서 환경 변수를 process.env에 로드하기 위해 필요
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+// 개발 환경: 프로젝트 루트의 .env 파일 로드
+// 프로덕션: 실행 파일 위치의 .env 파일 로드
+const envPath = process.env.NODE_ENV === 'production'
+  ? path.join(process.resourcesPath, '.env')
+  : path.join(__dirname, '..', '.env');
+
+dotenv.config({ path: envPath });
+
+// 환경 변수 로드 확인 (디버깅용)
+console.log('[ENV] Supabase URL:', process.env.SUPABASE_URL ? '✅ Loaded' : '❌ Missing');
+console.log('[ENV] Supabase Anon Key:', process.env.SUPABASE_ANON_KEY ? '✅ Loaded' : '❌ Missing');
+
 import { app, BrowserWindow, ipcMain, dialog, IpcMainInvokeEvent } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs/promises';
 
@@ -50,8 +66,10 @@ function createMainWindow(): void {
       nodeIntegration: true,
       // 컨텍스트 격리 비활성화 (보안상 프로덕션에서는 활성화 권장)
       contextIsolation: false,
-      // preload 스크립트 경로 (향후 보안 강화 시 사용)
-      preload: path.join(__dirname, 'preload.js'),
+      // preload 스크립트 경로 (개발/프로덕션 환경 분리)
+      preload: isDevelopment
+        ? path.join(__dirname, 'preload.js')
+        : path.join(__dirname, '..', 'dist-electron', 'preload.js'),
     },
     // 초기에는 윈도우 숨기기 (로딩 완료 후 표시)
     show: false,
@@ -75,7 +93,8 @@ function createMainWindow(): void {
     );
   }
 
-  // 개발자 도구 자동 열기 (개발/프로덕션 모두)
+  // 개발자 도구 자동 열기 (디버깅을 위해 임시로 항상 활성화)
+  // TODO: 프로덕션 배포 시 isDevelopment 조건으로 변경
   mainWindow.webContents.openDevTools();
 
   // 로딩 완료 후 윈도우 표시
@@ -92,9 +111,92 @@ function createMainWindow(): void {
 }
 
 /**
+ * Deep Link 핸들러 설정
+ * 이메일 인증 링크 처리: pixelbooster://email-confirmed?token=xxx
+ */
+function setupDeepLinkHandler(): void {
+  // Windows & Linux: 두 번째 인스턴스 실행 시 첫 번째 인스턴스로 포커스 이동
+  const gotTheLock = app.requestSingleInstanceLock();
+
+  if (!gotTheLock) {
+    // 이미 실행 중인 인스턴스가 있으면 종료
+    app.quit();
+  } else {
+    // 두 번째 인스턴스 실행 시 처리
+    app.on('second-instance', (_event, commandLine, _workingDirectory) => {
+      // 윈도우 포커스
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
+
+        // Deep Link URL 처리
+        const url = commandLine.find((arg) => arg.startsWith('pixelbooster://'));
+        if (url) {
+          handleDeepLink(url);
+        }
+      }
+    });
+  }
+
+  // macOS: 앱이 이미 실행 중일 때 Deep Link 처리
+  app.on('open-url', (event, url) => {
+    event.preventDefault();
+    handleDeepLink(url);
+  });
+}
+
+/**
+ * Deep Link URL 파싱 및 처리
+ * @param url - pixelbooster://email-confirmed?token=xxx
+ */
+function handleDeepLink(url: string): void {
+  console.log('[DeepLink] Received URL:', url);
+
+  try {
+    const parsedUrl = new URL(url);
+    const action = parsedUrl.hostname; // 'email-confirmed', 'reset-password' 등
+
+    if (action === 'email-confirmed') {
+      // 이메일 인증 완료
+      const token = parsedUrl.searchParams.get('token');
+      const type = parsedUrl.searchParams.get('type');
+
+      console.log('[DeepLink] Email confirmed:', { token, type });
+
+      // Renderer 프로세스로 이벤트 전송
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('email-confirmed', { token, type });
+
+        // 성공 메시지 다이얼로그 표시
+        dialog.showMessageBox(mainWindow, {
+          type: 'info',
+          title: '이메일 인증 완료',
+          message: '이메일 인증이 완료되었습니다!',
+          detail: '이제 로그인하여 픽셀부스터를 사용할 수 있습니다.',
+          buttons: ['확인'],
+        });
+      }
+    } else if (action === 'reset-password') {
+      // 비밀번호 재설정
+      const token = parsedUrl.searchParams.get('token');
+      console.log('[DeepLink] Reset password:', { token });
+
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('reset-password', { token });
+      }
+    }
+  } catch (error) {
+    console.error('[DeepLink] URL parsing error:', error);
+  }
+}
+
+/**
  * Electron 앱 초기화
  */
 app.whenReady().then(() => {
+  // Deep Link 핸들러 설정 (Windows/Linux)
+  setupDeepLinkHandler();
+
   createMainWindow();
   setupIpcHandlers();
   setupAutoUpdater();
@@ -338,9 +440,9 @@ function setupIpcHandlers(): void {
   // 로그인
   ipcMain.handle(
     IPC_CHANNELS.AUTH_SIGN_IN,
-    async (_event: IpcMainInvokeEvent, email: string, password: string) => {
+    async (_event: IpcMainInvokeEvent, loginData: { email: string; password: string }) => {
       try {
-        const result = await authManager.signIn({ email, password });
+        const result = await authManager.signIn({ email: loginData.email, password: loginData.password });
         return result;
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
@@ -352,12 +454,12 @@ function setupIpcHandlers(): void {
   // 회원가입
   ipcMain.handle(
     IPC_CHANNELS.AUTH_SIGN_UP,
-    async (_event: IpcMainInvokeEvent, email: string, password: string, fullName?: string) => {
+    async (_event: IpcMainInvokeEvent, signUpData: { email: string; password: string; fullName?: string }) => {
       try {
         const result = await authManager.signUp({
-          email,
-          password,
-          metadata: { fullName },
+          email: signUpData.email,
+          password: signUpData.password,
+          metadata: signUpData.fullName ? { fullName: signUpData.fullName } : undefined,
         });
         return result;
       } catch (error) {
