@@ -100,8 +100,101 @@ ipcMain.on('app-info', (event) => {
   });
 });
 
-// 향후 추가될 IPC 핸들러들
-// - 이미지 처리 요청
-// - 파일 선택 다이얼로그
-// - 설정 저장/불러오기
-// - 구독 등급 확인
+/**
+ * IPC 핸들러: 파일 선택 다이얼로그
+ */
+ipcMain.handle('open-file-dialog', async () => {
+  const { dialog } = require('electron');
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openFile', 'multiSelections'],
+    filters: [
+      {
+        name: '이미지',
+        extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'avif', 'svg', 'heif', 'heic']
+      }
+    ]
+  });
+
+  if (result.canceled) {
+    return { success: false, error: '파일 선택이 취소되었습니다' };
+  }
+
+  return { success: true, data: result.filePaths };
+});
+
+/**
+ * IPC 핸들러: 폴더 선택 다이얼로그
+ */
+ipcMain.handle('open-folder-dialog', async () => {
+  const { dialog } = require('electron');
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory']
+  });
+
+  if (result.canceled) {
+    return { success: false, error: '폴더 선택이 취소되었습니다' };
+  }
+
+  return { success: true, data: result.filePaths[0] };
+});
+
+/**
+ * IPC 핸들러: 배치 이미지 처리 시작
+ */
+ipcMain.handle('start-batch-process', async (event, files, options) => {
+  // ImageProcessor는 나중에 TypeScript로 변환 후 import
+  // 현재는 기본 응답만 반환
+  console.log('배치 처리 시작:', { files: files.length, options });
+
+  // 진행 상태 업데이트 예시
+  event.sender.send('batch-progress', {
+    total: files.length,
+    completed: 0,
+    failed: 0,
+    processing: 1,
+    overallProgress: 0,
+    items: []
+  });
+
+  // 실제 구현은 TypeScript 마이그레이션 후 추가
+  return {
+    success: true,
+    message: 'ImageProcessor 구현 대기 중'
+  };
+});
+
+/**
+ * IPC 핸들러: 배치 처리 취소
+ */
+ipcMain.on('cancel-batch-process', () => {
+  console.log('배치 처리 취소 요청');
+  // ImageProcessor.cancelBatch() 호출 예정
+});
+
+/**
+ * IPC 핸들러: 파일 정보 가져오기
+ */
+ipcMain.handle('get-file-info', async (event, filePath) => {
+  const fs = require('fs').promises;
+  const pathModule = require('path');
+
+  try {
+    const stats = await fs.stat(filePath);
+    const parsedPath = pathModule.parse(filePath);
+
+    return {
+      success: true,
+      data: {
+        path: filePath,
+        name: parsedPath.base,
+        extension: parsedPath.ext.slice(1),
+        size: stats.size
+      }
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: `파일 정보를 가져올 수 없습니다: ${error.message}`
+    };
+  }
+});

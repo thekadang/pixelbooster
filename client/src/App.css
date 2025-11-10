@@ -1,24 +1,80 @@
-/* App.css - 메인 스타일시트 */
+/* App.css - 메인 애플리케이션 스타일 */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #333;
+}
 
 .app-container {
-  width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 헤더 */
+.app-header {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 24px 40px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.app-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #667eea;
+  margin: 0 0 8px 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
+  gap: 12px;
 }
 
-.hero-section {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  padding: 3rem;
-  max-width: 900px;
+.emoji {
+  font-size: 40px;
+  display: inline-block;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.app-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* 메인 컨텐츠 */
+.app-main {
+  flex: 1;
+  padding: 40px 20px;
+  max-width: 1200px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  animation: fadeIn 0.6s ease-in-out;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: 32px;
+  animation: fadeIn 0.6s ease both;
 }
 
 @keyframes fadeIn {
@@ -32,117 +88,133 @@
   }
 }
 
-.title {
-  font-size: 3rem;
-  font-weight: 700;
-  color: #667eea;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+/* 액션 버튼 */
+.action-buttons {
+  margin-top: 24px;
+  text-align: center;
 }
 
-.emoji {
-  font-size: 3.5rem;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.subtitle {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 2.5rem;
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.feature-card {
-  background: #f8f9fa;
+.start-button {
+  padding: 16px 48px;
+  background: linear-gradient(135deg, #4caf50, #8bc34a);
+  color: white;
+  border: none;
   border-radius: 12px;
-  padding: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
 }
 
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+.start-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.4);
 }
 
-.feature-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+.start-button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
-.feature-card h3 {
-  font-size: 1.1rem;
-  color: #333;
-  margin-bottom: 0.5rem;
+.start-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-.feature-card p {
-  font-size: 0.9rem;
-  color: #666;
-  line-height: 1.5;
-}
-
-.app-info {
-  background: #e9ecef;
-  border-radius: 10px;
-  padding: 1rem;
-  margin-top: 2rem;
-  text-align: left;
-}
-
-.app-info p {
-  font-size: 0.95rem;
-  color: #495057;
-  margin: 0.5rem 0;
-}
-
-.app-info strong {
-  color: #667eea;
+/* 푸터 */
+.app-footer {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px 40px;
+  text-align: center;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
 }
 
 .status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: #d4edda;
-  color: #155724;
-  padding: 0.5rem 1rem;
+  gap: 10px;
+  padding: 8px 20px;
   border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-top: 1.5rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
 }
 
 .status-dot {
   width: 10px;
   height: 10px;
-  background: #28a745;
+  background: #4caf50;
   border-radius: 50%;
-  animation: pulse 1.5s infinite;
+  animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
+    transform: scale(1);
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 20px 24px;
+  }
+
+  .app-title {
+    font-size: 28px;
+  }
+
+  .emoji {
+    font-size: 32px;
+  }
+
+  .app-subtitle {
+    font-size: 14px;
+  }
+
+  .app-main {
+    padding: 24px 16px;
+  }
+
+  .start-button {
+    width: 100%;
+    padding: 14px 32px;
+    font-size: 16px;
+  }
+
+  .app-footer {
+    padding: 16px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: 16px 20px;
+  }
+
+  .app-title {
+    font-size: 24px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .emoji {
+    font-size: 28px;
+  }
+
+  .app-main {
+    padding: 20px 12px;
+  }
+
+  .section {
+    margin-bottom: 24px;
   }
 }

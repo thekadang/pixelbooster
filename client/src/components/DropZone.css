@@ -1,0 +1,205 @@
+/* components/DropZone.css - 드래그 앤 드롭 영역 스타일 */
+
+.dropzone-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.dropzone-area {
+  border: 3px dashed #d0d0d0;
+  border-radius: 16px;
+  padding: 60px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.dropzone-area:hover {
+  border-color: #4caf50;
+  background: #f0f9f0;
+  transform: translateY(-2px);
+}
+
+.dropzone-area.dragging {
+  border-color: #4caf50;
+  background: #e8f5e9;
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.2);
+  transform: scale(1.02);
+}
+
+.dropzone-content {
+  pointer-events: none;
+}
+
+.dropzone-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.dropzone-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 12px 0;
+}
+
+.dropzone-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* 파일 목록 */
+.file-list {
+  margin-top: 32px;
+}
+
+.file-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.file-list-header h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.clear-button {
+  padding: 8px 16px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-button:hover {
+  background: #d32f2f;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.file-items {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 12px;
+  background: white;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f9f9f9;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.file-item:hover {
+  background: #f0f0f0;
+  transform: translateX(4px);
+}
+
+.file-item:last-child {
+  margin-bottom: 0;
+}
+
+.file-icon {
+  font-size: 32px;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.file-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-path {
+  font-size: 13px;
+  color: #999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 스크롤바 스타일 */
+.file-items::-webkit-scrollbar {
+  width: 8px;
+}
+
+.file-items::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.file-items::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 4px;
+}
+
+.file-items::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .dropzone-area {
+    padding: 40px 24px;
+  }
+
+  .dropzone-icon {
+    font-size: 48px;
+  }
+
+  .dropzone-title {
+    font-size: 20px;
+  }
+
+  .dropzone-subtitle {
+    font-size: 14px;
+  }
+
+  .file-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .clear-button {
+    width: 100%;
+  }
+}
