@@ -23,5 +23,17 @@ exports.IPC_CHANNELS = {
     PROCESSING_ERROR: 'processing-error',
     // 파일 정보
     GET_FILE_INFO: 'get-file-info',
+    // 인증 관련
+    AUTH_SIGN_IN: 'auth-sign-in',
+    AUTH_SIGN_UP: 'auth-sign-up',
+    AUTH_SIGN_OUT: 'auth-sign-out',
+    AUTH_RESET_PASSWORD: 'auth-reset-password',
+    AUTH_GET_STATE: 'auth-get-state',
+    AUTH_STATE_CHANGED: 'auth-state-changed',
+    // 구독 관리
+    SUBSCRIPTION_GET: 'subscription-get',
+    SUBSCRIPTION_REFRESH: 'subscription-refresh',
+    SUBSCRIPTION_CHECK_FORMAT: 'subscription-check-format',
+    SUBSCRIPTION_VALIDATE_BATCH: 'subscription-validate-batch',
 };
 //# sourceMappingURL=ipc.js.map

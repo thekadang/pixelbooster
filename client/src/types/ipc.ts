@@ -29,6 +29,20 @@ export const IPC_CHANNELS = {
 
   // 파일 정보
   GET_FILE_INFO: 'get-file-info',
+
+  // 인증 관련
+  AUTH_SIGN_IN: 'auth-sign-in',
+  AUTH_SIGN_UP: 'auth-sign-up',
+  AUTH_SIGN_OUT: 'auth-sign-out',
+  AUTH_RESET_PASSWORD: 'auth-reset-password',
+  AUTH_GET_STATE: 'auth-get-state',
+  AUTH_STATE_CHANGED: 'auth-state-changed',
+
+  // 구독 관리
+  SUBSCRIPTION_GET: 'subscription-get',
+  SUBSCRIPTION_REFRESH: 'subscription-refresh',
+  SUBSCRIPTION_CHECK_FORMAT: 'subscription-check-format',
+  SUBSCRIPTION_VALIDATE_BATCH: 'subscription-validate-batch',
 } as const;
 
 /**
@@ -105,6 +119,48 @@ export interface IpcEvents {
 }
 
 /**
+ * 인증 요청 타입
+ */
+export interface AuthSignInRequest {
+  email: string;
+  password: string;
+}
+
+export interface AuthSignUpRequest {
+  email: string;
+  password: string;
+  fullName?: string;
+}
+
+/**
+ * 인증 상태 타입
+ */
+export interface AuthState {
+  isAuthenticated: boolean;
+  user: {
+    id: string;
+    email: string;
+    emailConfirmedAt: string | null;
+  } | null;
+}
+
+/**
+ * 구독 정보 타입
+ */
+export interface SubscriptionInfo {
+  tier: 'free' | 'basic' | 'pro';
+  status: 'active' | 'expired' | 'suspended' | 'cancelled';
+  expiresAt: string | null;
+  features: {
+    formats: string[];
+    maxBatchSize: number;
+    maxDevices: number;
+    backupEnabled: boolean;
+    logEnabled: boolean;
+  };
+}
+
+/**
  * IPC 리스너 타입 정의
  */
 export interface IpcListeners {
@@ -112,4 +168,5 @@ export interface IpcListeners {
   [IPC_CHANNELS.BATCH_PROGRESS]: (progress: BatchProcessProgress) => void;
   [IPC_CHANNELS.PROCESSING_COMPLETE]: (finalProgress: BatchProcessProgress) => void;
   [IPC_CHANNELS.PROCESSING_ERROR]: (error: string) => void;
+  [IPC_CHANNELS.AUTH_STATE_CHANGED]: (state: AuthState) => void;
 }

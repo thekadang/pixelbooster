@@ -1,6 +1,7 @@
 // webpack.config.js - Webpack 설정 파일
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development';
@@ -84,6 +85,13 @@ module.exports = (env, argv) => {
         template: './client/src/index.html',
         filename: 'index.html',
         inject: 'body'
+      }),
+      new Dotenv({
+        path: './.env',
+        safe: true, // .env.example 파일을 검증
+        systemvars: true, // 시스템 환경 변수도 로드
+        silent: false, // 에러 출력
+        defaults: false
       })
     ],
 

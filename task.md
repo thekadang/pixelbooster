@@ -5,22 +5,28 @@
 ## 📊 프로젝트 개요
 
 - **시작일**: 2025-11-10
-- **현재 단계**: Phase 2 완료! 🎉 → Phase 3 준비 중
-- **전체 진행률**: 55%
+- **현재 단계**: Phase 3-1 완료! 🎉 (서버 연동 준비 60%)
+- **전체 진행률**: 60%
 - **예상 완료일**: 2025-12-31
 
 ---
 
 ## 🎯 현재 작업 중 (In Progress)
 
-- [x] Phase 1 완료 ✅
-- [x] Phase 2 완료! 🎉 (클라이언트 개발 100%)
+- [x] Phase 1 완료 ✅ (100%)
+- [x] Phase 2 완료 ✅ (100%) 🎉 (클라이언트 개발)
   - [x] TypeScript 마이그레이션 완료
   - [x] ImageProcessor 실제 통합 완료
   - [x] 병렬 처리 최적화 완료
   - [x] 실제 이미지 변환 테스트 완료
   - [x] CSP 정책 최적화 완료
-- [ ] Phase 3 시작 준비 중 (서버 연동)
+- [x] Phase 3-1 완료 ✅ (60%) 🎉 (서버 연동 준비)
+  - [x] AuthManager 서비스 구현
+  - [x] SecureStorage 서비스 구현
+  - [x] SubscriptionManager 서비스 구현
+  - [x] IPC 핸들러 추가 (인증/구독)
+  - [x] 환경 변수 설정 (.env)
+- [ ] Phase 3-2 대기 중 (UI 컴포넌트 및 연동)
 
 ---
 
@@ -103,6 +109,39 @@
   - [x] 실제 이미지 변환 테스트 (WebP, AVIF)
   - [x] 배치 처리 테스트 (다중 파일)
   - [x] 이미지 처리 기능 문서 작성 (docs/features/image-processing.md)
+- [x] **Phase 3-1: 서버 연동 준비 완료** 🎉
+  - [x] AuthManager 서비스 구현 (Supabase Auth SDK 연동)
+    - 로그인/회원가입/로그아웃 기능
+    - 세션 관리 및 상태 추적
+    - 이메일 인증 처리
+    - 에러 메시지 한글화
+  - [x] SecureStorage 서비스 구현 (electron-store 기반)
+    - machine-id 기반 암호화 키 생성
+    - JWT 토큰 암호화 저장
+    - 구독 정보 캐싱 (1시간 TTL)
+  - [x] SubscriptionManager 서비스 구현
+    - 구독 등급 조회 및 캐싱
+    - 등급별 기능 제한 확인 (Free/Basic/Pro)
+    - 포맷 지원 여부 검증
+    - 배치 크기 검증
+    - 만료일 확인 및 남은 일수 계산
+  - [x] IPC 핸들러 추가 (main.ts)
+    - 인증: AUTH_SIGN_IN, AUTH_SIGN_UP, AUTH_SIGN_OUT, AUTH_RESET_PASSWORD
+    - 구독: SUBSCRIPTION_GET, SUBSCRIPTION_REFRESH, SUBSCRIPTION_CHECK_FORMAT
+    - 인증 상태 변경 리스너
+  - [x] 타입 정의 확장 (types/ipc.ts)
+    - AuthState, SubscriptionInfo 타입 정의
+    - 인증/구독 IPC 채널 정의
+  - [x] 환경 변수 설정
+    - dotenv, dotenv-webpack 설치
+    - webpack.config.js Dotenv 플러그인 추가
+    - .env 파일 생성 (Supabase 키)
+  - [x] 의존성 설치
+    - @supabase/supabase-js
+    - electron-store
+    - node-machine-id
+    - @types/electron-store
+  - [x] TypeScript 컴파일 성공 ✅
 
 ---
 

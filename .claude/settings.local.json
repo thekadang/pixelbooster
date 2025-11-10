@@ -25,7 +25,11 @@
       "Bash(npm start)",
       "Bash(electron .)",
       "Bash(netstat:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(powershell:*)",
+      "Bash(cat:*)",
+      "Bash(echo:*)",
+      "Bash(.env)"
     ],
     "deny": [],
     "ask": []

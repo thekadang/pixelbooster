@@ -47,8 +47,10 @@ const fs = __importStar(require("fs/promises"));
 const electron_is_dev_1 = __importDefault(require("electron-is-dev"));
 // 타입 임포트
 const ipc_1 = require("./src/types/ipc");
-// ImageProcessor 임포트
+// 서비스 임포트
 const image_processor_1 = require("./src/services/image-processor");
+const auth_manager_1 = require("./src/services/auth-manager");
+const subscription_manager_1 = require("./src/services/subscription-manager");
 // 개발 환경 판단
 const isDevelopment = electron_is_dev_1.default;
 // 메인 윈도우 참조
@@ -254,6 +256,127 @@ function setupIpcHandlers() {
                 success: false,
                 error: `파일 정보를 가져올 수 없습니다: ${errorMessage}`,
             };
+        }
+    });
+    // ===== 인증 관련 IPC 핸들러 =====
+    // 로그인
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.AUTH_SIGN_IN, async (_event, email, password) => {
+        try {
+            const result = await auth_manager_1.authManager.signIn({ email, password });
+            return result;
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `로그인 실패: ${errorMessage}` };
+        }
+    });
+    // 회원가입
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.AUTH_SIGN_UP, async (_event, email, password, fullName) => {
+        try {
+            const result = await auth_manager_1.authManager.signUp({
+                email,
+                password,
+                metadata: { fullName },
+            });
+            return result;
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `회원가입 실패: ${errorMessage}` };
+        }
+    });
+    // 로그아웃
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.AUTH_SIGN_OUT, async () => {
+        try {
+            const result = await auth_manager_1.authManager.signOut();
+            return result;
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `로그아웃 실패: ${errorMessage}` };
+        }
+    });
+    // 비밀번호 재설정
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.AUTH_RESET_PASSWORD, async (_event, email) => {
+        try {
+            const result = await auth_manager_1.authManager.resetPassword(email);
+            return result;
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `비밀번호 재설정 실패: ${errorMessage}` };
+        }
+    });
+    // 인증 상태 조회
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.AUTH_GET_STATE, () => {
+        try {
+            const state = auth_manager_1.authManager.getAuthState();
+            return { success: true, data: state };
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `인증 상태 조회 실패: ${errorMessage}` };
+        }
+    });
+    // 인증 상태 변경 리스너 등록
+    auth_manager_1.authManager.onAuthStateChange((state) => {
+        // 모든 윈도우에 인증 상태 변경 알림
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send(ipc_1.IPC_CHANNELS.AUTH_STATE_CHANGED, {
+                isAuthenticated: state.isAuthenticated,
+                user: state.user
+                    ? {
+                        id: state.user.id,
+                        email: state.user.email || '',
+                        emailConfirmedAt: state.user.email_confirmed_at,
+                    }
+                    : null,
+            });
+        }
+    });
+    // ===== 구독 관리 IPC 핸들러 =====
+    // 구독 정보 조회
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.SUBSCRIPTION_GET, async (_event, userId) => {
+        try {
+            const result = await subscription_manager_1.subscriptionManager.getSubscription(userId);
+            return result;
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `구독 조회 실패: ${errorMessage}` };
+        }
+    });
+    // 구독 정보 강제 갱신
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.SUBSCRIPTION_REFRESH, async (_event, userId) => {
+        try {
+            const result = await subscription_manager_1.subscriptionManager.getSubscription(userId, true);
+            return result;
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `구독 갱신 실패: ${errorMessage}` };
+        }
+    });
+    // 포맷 지원 여부 확인
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.SUBSCRIPTION_CHECK_FORMAT, async (_event, format, userId) => {
+        try {
+            const result = await subscription_manager_1.subscriptionManager.isFormatSupported(format, userId);
+            return result;
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `포맷 확인 실패: ${errorMessage}` };
+        }
+    });
+    // 배치 크기 검증
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.SUBSCRIPTION_VALIDATE_BATCH, async (_event, batchSize, userId) => {
+        try {
+            const result = await subscription_manager_1.subscriptionManager.validateBatchSize(batchSize, userId);
+            return result;
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `배치 크기 검증 실패: ${errorMessage}` };
         }
     });
 }
