@@ -2,14 +2,14 @@
 
 > 이 파일은 자동으로 업데이트됩니다. 커밋을 선택하여 해당 시점으로 롤백할 수 있습니다.
 
-**마지막 업데이트**: 2025-11-10 23:50
+**마지막 업데이트**: 2025-11-11 00:46
 
 ---
 
 ## 📊 통계
 
-- **총 커밋 수**: 37
-- **마지막 커밋**: 2025-11-10 23:50
+- **총 커밋 수**: 38
+- **마지막 커밋**: 2025-11-11 00:46
 - **현재 브랜치**: main
 - **원격 저장소**: https://github.com/thekadang/pixelbooster.git
 
@@ -17,7 +17,82 @@
 
 ## 🔖 커밋 목록
 
-### 2025-11-10 23:50 [CURRENT] ⭐ 🎊 ✅
+### 2025-11-11 00:46 [CURRENT] ⭐ 📚 ✅
+
+**커밋 해시**: `7bf6a8c`
+**커밋 주제**: **테스트 및 배포 문서 완성**
+
+**작성자**: thekadang
+**브랜치**: main
+
+**주요 변경사항**:
+- 🎉 **테스트/배포 준비 문서 4개 완성 (Phase 5 이후 선택 작업)**
+
+**신규 문서 작성 (4개)**:
+1. **docs/development/testing-guide.md**
+   - 8개 핵심 기능 테스트 시나리오
+   - 성능 테스트 기준 (메모리, CPU, 변환 속도)
+   - 버그 리포트 템플릿
+   - 테스트 완료 기준 (MVP / 프로덕션)
+
+2. **docs/deployment/deployment-checklist.md**
+   - 9개 섹션 검증 체크리스트
+   - Must Have / Should Have / Nice to Have 분류
+   - 보안 검증 항목 (환경 변수, API 키, 암호화)
+   - 긴급 대응 계획
+
+3. **docs/deployment/beta-testing-guide.md**
+   - 베타 테스터 모집 프로세스 (10-20명)
+   - 7일 테스트 일정 (단계별 작업)
+   - 피드백 수집 템플릿 (버그, 기능, UX)
+   - 결과 분석 방법론
+   - 베타 테스터 혜택 안내
+
+4. **docs/deployment/github-release-guide.md**
+   - GitHub Personal Access Token 설정 (단계별 가이드)
+   - 베타/프로덕션 릴리스 프로세스
+   - 자동 업데이트 검증 절차
+   - 문제 해결 가이드 (토큰, latest.yml 등)
+   - GitHub Actions 자동화 (선택 사항)
+
+**문서 업데이트**:
+- **CLAUDE.md**: 테스트/배포 섹션 추가, 빠른 시작 가이드 업데이트
+- **task.md**: 테스트/배포 문서 완성 상태 반영 (96개 완료)
+
+**프로젝트 상태**:
+```
+- 핵심 개발: 100% 완료 ✅ (Phase 1-5)
+- 테스트/배포 문서: 100% 완료 ✅
+- 총 완료: 96개 (92개 핵심 + 4개 문서)
+- 선택 작업 대기: 5개
+  - 빌드 파일 실제 테스트
+  - 베타 테스트 실행
+  - GitHub Release 배포
+  - macOS 빌드
+  - 코드 사이닝
+```
+
+**변경된 파일**: 7개 (4개 신규, 3개 수정)
+```
+신규: docs/development/testing-guide.md
+신규: docs/deployment/deployment-checklist.md
+신규: docs/deployment/beta-testing-guide.md
+신규: docs/deployment/github-release-guide.md
+수정: CLAUDE.md (테스트/배포 섹션 추가)
+수정: task.md (완료 상태 반영)
+수정: .claude/settings.local.json
+```
+
+**다음 단계 (선택 사항)**:
+- 빌드 파일 실제 테스트 (픽셀부스터 Setup 0.1.0.exe)
+- 베타 테스트 실행 (beta-testing-guide.md 참고)
+- GitHub Release 배포 (github-release-guide.md 참고)
+
+**롤백 방법**: `git reset --hard 7bf6a8c`
+
+---
+
+### 2025-11-10 23:50 ⭐ 🎊 ✅
 
 **커밋 해시**: `378c9da`
 **커밋 주제**: **Phase 5-3 완료 - 빌드 및 패키징 설정**
