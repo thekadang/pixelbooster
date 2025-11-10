@@ -1,0 +1,25 @@
+{
+  "name": "thekadang-pixelbooster",
+  "version": "0.1.0",
+  "description": "이미지 최적화 데스크톱 애플리케이션",
+  "main": "client/main.js",
+  "scripts": {
+    "test:supabase": "node test-supabase-connection.js",
+    "start": "echo 'Electron 프로젝트 초기화 후 사용 가능합니다.'",
+    "dev": "echo 'Electron 프로젝트 초기화 후 사용 가능합니다.'"
+  },
+  "keywords": [
+    "image",
+    "optimization",
+    "webp",
+    "avif",
+    "electron"
+  ],
+  "author": "더카당",
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {}
+}
