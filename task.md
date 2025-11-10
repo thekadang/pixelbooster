@@ -148,6 +148,16 @@
 ### 2025-11-11
 - [x] 빌드 파일 자동 검증 완료
   - 빌드 파일 존재 확인 (픽셀부스터 Setup 0.1.0.exe, 102.88 MB)
+- [x] 프로덕션 배포 준비 완료 (v0.1.0)
+  - CHANGELOG.md 작성 (전체 릴리스 노트)
+  - README.md 업데이트 (사용자 설치 가이드)
+  - Git 태그 생성 및 푸시 (v0.1.0)
+  - DEPLOYMENT_INSTRUCTIONS.md 작성
+  - DEPLOYMENT_STATUS.md 작성
+- [x] 프로덕션 빌드 오류 해결 (2건)
+  - electron-is-dev 의존성 제거 → app.isPackaged로 대체
+  - build.files에 client/src/**/*.js 추가
+  - 최종 빌드 성공 (픽셀부스터 Setup 0.1.0.exe, 103 MB)
   - latest.yml 메타데이터 확인 (자동 업데이트)
   - TypeScript 컴파일 검증 (0 errors)
   - 환경 변수 확인 (.env)

@@ -15,9 +15,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 1단계: 프로젝트 상태 파악
 ```
 1. COMMIT_HISTORY.md 확인 - 최근 커밋 및 작업 이력
-2. task.md 확인 - 현재 진행 단계 (Phase 5 완료! 빌드 검증 완료 ✅)
-3. 다음 작업: 수동 테스트 진행 (MANUAL_TEST_GUIDE.md 참고)
-4. 테스트 보고서: TEST_REPORT.md 확인
+2. task.md 확인 - 현재 진행 단계 (Phase 5 완료! 프로덕션 배포 준비 완료 ✅)
+3. DEPLOYMENT_STATUS.md 확인 - 배포 진행 상황
+4. 다음 작업: GitHub Release 생성 (DEPLOYMENT_INSTRUCTIONS.md 참고)
 ```
 
 ### 2단계: 개발 명령어
