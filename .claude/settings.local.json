@@ -19,7 +19,11 @@
       "Bash(pkill node:*)",
       "Bash(npm run build:*)",
       "mcp__context7__resolve-library-id",
-      "mcp__context7__get-library-docs"
+      "mcp__context7__get-library-docs",
+      "Bash(npm run compile:main:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm start)",
+      "Bash(electron .)"
     ],
     "deny": [],
     "ask": []

@@ -5,8 +5,8 @@
 ## 📊 프로젝트 개요
 
 - **시작일**: 2025-11-10
-- **현재 단계**: Phase 2 진행 중 (이미지 처리 기능 구현 완료)
-- **전체 진행률**: 40%
+- **현재 단계**: Phase 2 진행 중 (TypeScript 마이그레이션 완료)
+- **전체 진행률**: 45%
 - **예상 완료일**: 2025-12-31
 
 ---
@@ -14,7 +14,7 @@
 ## 🎯 현재 작업 중 (In Progress)
 
 - [x] Phase 1 완료 ✅
-- [x] Phase 2: 클라이언트 개발 - 기본 기능 완료 🎉
+- [x] Phase 2: 클라이언트 개발 - TypeScript 마이그레이션 완료 🎉
 
 ---
 
@@ -25,7 +25,7 @@
 2. [x] 드래그 앤 드롭 UI 컴포넌트 ✅
 3. [x] 파일 선택 다이얼로그 ✅
 4. [x] 진행 상태 추적 UI ✅
-5. [ ] Main Process TypeScript 마이그레이션
+5. [x] Main Process TypeScript 마이그레이션 ✅
 6. [ ] ImageProcessor 실제 통합 (배치 처리)
 
 ### 단기 (This Week)
@@ -79,6 +79,13 @@
   - [x] IPC 통신 핸들러 (파일 선택, 폴더 선택, 배치 처리)
   - [x] 타입 시스템 구축 (types/index.ts)
   - [x] 반응형 디자인 및 애니메이션
+- [x] **Main Process TypeScript 마이그레이션 완료** 🎉
+  - [x] TypeScript 의존성 설치 및 설정 (tsconfig.json, tsconfig.main.json)
+  - [x] main.js → main.ts 변환 (완전한 타입 안정성)
+  - [x] preload.js → preload.ts 변환
+  - [x] IPC 핸들러 타입 정의 강화 (types/ipc.ts)
+  - [x] 빌드 스크립트 업데이트 (compile:main, watch:main)
+  - [x] Production 빌드 테스트 성공
 
 ---
 
@@ -105,7 +112,7 @@
 
 ---
 
-### Phase 2: 클라이언트 개발 (3-4주) - 🟢 진행 중 (60% 완료)
+### Phase 2: 클라이언트 개발 (3-4주) - 🟢 진행 중 (70% 완료)
 
 - [x] Electron 앱 기본 구조 ✅
   - [x] Main Process 설정
@@ -129,8 +136,14 @@
   - [x] 진행 상태 바 (실시간 업데이트)
   - [x] 빠른 프리셋 (빠른 변환, 균형잡힌, 최고 품질)
 
+- [x] Main Process TypeScript 마이그레이션 ✅
+  - [x] TypeScript 설정 (tsconfig.json, tsconfig.main.json)
+  - [x] main.js → main.ts 변환 (타입 안정성)
+  - [x] preload.js → preload.ts 변환
+  - [x] IPC 핸들러 타입 정의 (types/ipc.ts)
+  - [x] 빌드 스크립트 업데이트
+
 - [ ] 실제 통합 및 테스트
-  - [ ] Main Process TypeScript 마이그레이션
   - [ ] ImageProcessor 실제 연결
   - [ ] 실제 이미지 변환 테스트
   - [ ] 성능 최적화 (병렬 처리)
@@ -264,12 +277,12 @@
 ## 📊 통계
 
 - **총 작업 항목**: 100+
-- **완료**: 45
+- **완료**: 51
 - **진행 중**: 5
-- **대기 중**: 50+
+- **대기 중**: 44+
 - **Phase 1 완료율**: 100% ✅
-- **Phase 2 완료율**: 60% 🟢
-- **전체 진행률**: 40%
+- **Phase 2 완료율**: 70% 🟢
+- **전체 진행률**: 45%
 
 ---
 
@@ -286,14 +299,15 @@
 2. ✅ 드래그 앤 드롭 UI 컴포넌트 (완료)
 3. ✅ 기본 이미지 변환 기능 (완료)
 4. ✅ 배치 처리 및 진행 상태 UI (완료)
-5. [ ] Main Process TypeScript 마이그레이션
-6. [ ] 실제 이미지 변환 테스트
+5. ✅ Main Process TypeScript 마이그레이션 (완료)
+6. [ ] ImageProcessor 실제 통합
+7. [ ] 실제 이미지 변환 테스트
 
 ---
 
-**마지막 업데이트**: 2025-11-10 (Phase 2 이미지 처리 기능 구현 완료! 🎉)
+**마지막 업데이트**: 2025-11-10 (Main Process TypeScript 마이그레이션 완료! 🎉)
 **업데이트한 사람**: Claude Code
-**다음 업데이트 예정**: Phase 2 완전 완료 (실제 통합 및 테스트) 시
+**다음 업데이트 예정**: Phase 2 완전 완료 (ImageProcessor 실제 통합) 시
 
 ---
 
@@ -327,6 +341,37 @@
 - **문서**: Supabase 설정 가이드 작성
 
 자세한 설정 방법은 [docs/development/supabase-setup.md](docs/development/supabase-setup.md)를 참고하세요.
+
+### Main Process TypeScript 마이그레이션 완료 ✅ 🎉
+- **TypeScript 환경 구축**: tsconfig.json, tsconfig.main.json 설정 완료
+- **Main Process 변환**: main.js → main.ts (완전한 타입 안정성 확보)
+- **Preload Script 변환**: preload.js → preload.ts (향후 contextBridge 준비)
+- **IPC 통신 타입 시스템**: types/ipc.ts 생성
+  - IPC_CHANNELS 상수 정의
+  - 모든 핸들러 파라미터 및 반환 타입 정의
+  - Result<T> 타입 패턴 적용
+- **빌드 시스템 업데이트**:
+  - `compile:main`: TypeScript → JavaScript 컴파일
+  - `watch:main`: 개발 중 자동 컴파일
+  - `npm start`, `npm run build` 스크립트에 TypeScript 컴파일 통합
+- **타입 안정성 강화**:
+  - Dialog 반환 타입 정확한 처리
+  - 사용되지 않는 파라미터 명시 (_event)
+  - Electron 자체 타입 정의 사용 (@types/electron 제거)
+  - skipLibCheck 활성화로 라이브러리 타입 충돌 방지
+
+자세한 구현 내용:
+- **파일 구조**:
+  ```
+  client/
+  ├── main.ts              # Main Process (TypeScript)
+  ├── main.js              # 컴파일된 JavaScript
+  ├── preload.ts           # Preload Script (TypeScript)
+  ├── preload.js           # 컴파일된 JavaScript
+  └── src/types/
+      ├── index.ts         # 공통 타입 정의
+      └── ipc.ts          # IPC 통신 타입 정의
+  ```
 
 ### Phase 2: 이미지 처리 기능 구현 완료 ✅ 🎉
 - **ImageProcessor 서비스**: Sharp 기반 이미지 변환 엔진 (TypeScript)

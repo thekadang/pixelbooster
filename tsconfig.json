@@ -1,0 +1,67 @@
+{
+  "compilerOptions": {
+    // 타겟 및 모듈 설정
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+
+    // 모듈 해상도
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    // 출력 설정
+    "outDir": "./client/dist-ts",
+    "rootDir": "./",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    // 타입 체크 설정
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    // 추가 검사
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    // 실험적 기능
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    // 타입 정의 참조
+    "types": ["node"],
+
+    // 경로 별칭 (향후 확장 가능)
+    "baseUrl": "./",
+    "paths": {
+      "@/types/*": ["client/src/types/*"],
+      "@/services/*": ["client/src/services/*"],
+      "@/components/*": ["client/src/components/*"]
+    }
+  },
+  "include": [
+    "client/**/*.ts",
+    "client/**/*.tsx",
+    "shared/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "client/dist",
+    "client/dist-ts",
+    "dist-electron",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
+}

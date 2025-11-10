@@ -14,9 +14,17 @@ pnpm-lock.yaml
 client/dist/
 client/build/
 client/out/
+client/dist-ts/
 admin/dist/
 admin/build/
 dist-electron/
+
+# TypeScript 빌드 결과물
+*.d.ts
+*.d.ts.map
+*.js.map
+# 단, TypeScript 소스와 함께 있지 않은 JS 파일만 제외
+# main.js, preload.js는 컴파일된 결과물이므로 커밋
 
 # Electron 빌드
 client/release/

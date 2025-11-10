@@ -1,10 +1,47 @@
-"use strict";
 /**
  * Preload Script (TypeScript)
  * Renderer Process가 로드되기 전에 실행되는 스크립트
  * contextBridge를 통해 안전하게 Node.js API를 Renderer에 노출
  */
-Object.defineProperty(exports, "__esModule", { value: true });
+
+// import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import {
+  AppInfo,
+  FileInfo,
+  BatchProcessProgress,
+  Result,
+  ImageProcessOptions,
+} from './src/types/ipc';
+
+/**
+ * Electron API를 Renderer Process에 안전하게 노출
+ * 향후 contextIsolation: true로 전환 시 사용
+ */
+
+// 현재는 contextIsolation: false이므로 직접 노출은 불필요
+// 하지만 향후 보안 강화를 위해 contextBridge 패턴을 준비
+
+interface ElectronAPI {
+  // 앱 정보
+  getAppInfo: () => void;
+  onAppInfo: (callback: (info: AppInfo) => void) => () => void;
+
+  // 파일/폴더 선택
+  openFileDialog: () => Promise<Result<string[]>>;
+  openFolderDialog: () => Promise<Result<string>>;
+
+  // 배치 처리
+  startBatchProcess: (
+    files: string[],
+    options: ImageProcessOptions
+  ) => Promise<{ success: boolean; message?: string; error?: string }>;
+  cancelBatchProcess: () => void;
+  onBatchProgress: (callback: (progress: BatchProcessProgress) => void) => () => void;
+
+  // 파일 정보
+  getFileInfo: (filePath: string) => Promise<Result<FileInfo>>;
+}
+
 // contextBridge를 통해 안전하게 API 노출 (향후 contextIsolation: true 시 활성화)
 /*
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -62,5 +99,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
 } as ElectronAPI);
 */
+
 console.log('Preload script loaded (TypeScript)');
-//# sourceMappingURL=preload.js.map
+
+// 타입 선언을 위한 글로벌 확장
+declare global {
+  interface Window {
+    electronAPI: ElectronAPI;
+  }
+}
+
+export {};
