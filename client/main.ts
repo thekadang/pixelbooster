@@ -186,7 +186,7 @@ function setupIpcHandlers(): void {
     }
   );
 
-  // 배치 이미지 처리 시작
+  // 배치 이미지 처리 시작 (백업 + 변환 + 로그 통합)
   ipcMain.handle(
     IPC_CHANNELS.START_BATCH_PROCESS,
     async (
@@ -205,36 +205,72 @@ function setupIpcHandlers(): void {
           };
         }
 
-        // 진행 상태 콜백: Renderer로 실시간 전송
+        // 1단계: 원본 파일 백업 (BackupManager)
+        console.log('1단계: 원본 파일 백업 시작');
+        const backupManager = new BackupManager();
+        const backupResult = await backupManager.backupBatch(
+          files,
+          (progress) => {
+            // 백업 진행 상태를 Renderer로 전송 (선택적)
+            console.log(`백업 진행: ${progress.completed}/${progress.total}`);
+          }
+        );
+
+        if (!backupResult.success) {
+          console.error('백업 실패:', backupResult.error);
+          return {
+            success: false,
+            message: `백업 실패: ${backupResult.error}`,
+          };
+        }
+
+        console.log(`백업 완료: ${backupResult.data.successCount} 성공, ${backupResult.data.failedCount} 실패`);
+
+        // 2단계: 이미지 변환 (ImageProcessor)
+        console.log('2단계: 이미지 변환 시작');
         const onProgress = (progress: BatchProcessProgress) => {
           event.sender.send(IPC_CHANNELS.BATCH_PROGRESS, progress);
         };
 
-        // ImageProcessor를 통한 배치 처리 시작
-        const result = await imageProcessor.processBatch(
+        const processResult = await imageProcessor.processBatch(
           files,
           options.outputDir,
           options,
           onProgress
         );
 
-        if (result.success) {
-          // 처리 완료 이벤트 전송
-          event.sender.send(IPC_CHANNELS.PROCESSING_COMPLETE, result.data);
-
-          return {
-            success: true,
-            message: `처리 완료: ${result.data.completed}개 성공, ${result.data.failed}개 실패`,
-          };
-        } else {
-          // 에러 이벤트 전송
-          event.sender.send(IPC_CHANNELS.PROCESSING_ERROR, result.error);
+        if (!processResult.success) {
+          console.error('이미지 변환 실패:', processResult.error);
+          event.sender.send(IPC_CHANNELS.PROCESSING_ERROR, processResult.error);
 
           return {
             success: false,
-            message: result.error,
+            message: processResult.error,
           };
         }
+
+        const batchProgress = processResult.data;
+        console.log(`변환 완료: ${batchProgress.completed} 성공, ${batchProgress.failed} 실패`);
+
+        // 3단계: 작업 로그 기록 (LogManager)
+        console.log('3단계: 작업 로그 기록 시작');
+        const logManager = new LogManager();
+        const logResult = await logManager.appendBatchLog(batchProgress);
+
+        if (!logResult.success) {
+          console.warn('로그 기록 실패 (처리는 성공):', logResult.error);
+          // 로그 실패는 경고만 표시하고 계속 진행
+        } else {
+          console.log('로그 기록 완료');
+        }
+
+        // 처리 완료 이벤트 전송
+        event.sender.send(IPC_CHANNELS.PROCESSING_COMPLETE, batchProgress);
+
+        return {
+          success: true,
+          message: `처리 완료: ${batchProgress.completed}개 성공, ${batchProgress.failed}개 실패`,
+        };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
         console.error('배치 처리 실패:', errorMessage);

@@ -62,10 +62,14 @@ export interface BatchProcessItem {
   originalSize?: number;
   /** 변환된 파일 크기 (bytes) */
   convertedSize?: number;
+  /** 압축률 (0-100%) */
+  compressionRatio?: number;
   /** 처리 시작 시간 */
   startTime?: number;
   /** 처리 완료 시간 */
   endTime?: number;
+  /** 처리 시간 (밀리초) */
+  processingTime?: number;
 }
 
 /**

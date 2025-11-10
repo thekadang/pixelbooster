@@ -16,7 +16,6 @@ import type {
   BackupProgress,
   BackupBatchResult,
   BackupIndex,
-  BackupStatus,
 } from '../types';
 
 export class BackupManager {
@@ -144,9 +143,10 @@ export class BackupManager {
           completed++;
         } else {
           result.failedCount++;
+          const errorMessage = backupResult.success ? '알 수 없는 오류' : backupResult.error;
           result.failedFiles.push({
             filePath,
-            error: backupResult.error || '알 수 없는 오류',
+            error: errorMessage,
           });
           failed++;
         }
