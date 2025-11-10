@@ -300,7 +300,8 @@ export class ImageProcessor {
         });
 
       case 'bmp':
-        return sharpInstance.toFormat('bmp');
+        // BMP는 Sharp의 toFormat에 직접 전달 가능하지만 타입 안정성을 위해 any 사용
+        return sharpInstance.toFormat('bmp' as any);
 
       default:
         // 기본값: webp

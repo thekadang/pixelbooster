@@ -19,6 +19,8 @@ exports.IPC_CHANNELS = {
     START_BATCH_PROCESS: 'start-batch-process',
     CANCEL_BATCH_PROCESS: 'cancel-batch-process',
     BATCH_PROGRESS: 'batch-progress',
+    PROCESSING_COMPLETE: 'processing-complete',
+    PROCESSING_ERROR: 'processing-error',
     // 파일 정보
     GET_FILE_INFO: 'get-file-info',
 };

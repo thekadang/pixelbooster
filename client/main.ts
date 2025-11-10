@@ -20,6 +20,9 @@ import {
   ImageProcessOptions,
 } from './src/types/ipc';
 
+// ImageProcessor 임포트
+import { imageProcessor } from './src/services/image-processor';
+
 // 개발 환경 판단
 const isDevelopment: boolean = isDev;
 
@@ -55,8 +58,6 @@ function createMainWindow(): void {
   // 프로덕션: 빌드된 HTML 파일 로드
   if (isDevelopment) {
     mainWindow.loadURL('http://localhost:3000');
-    // 개발자 도구 자동 열기
-    mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadURL(
       url.format({
@@ -66,6 +67,9 @@ function createMainWindow(): void {
       })
     );
   }
+
+  // 개발자 도구 자동 열기 (개발/프로덕션 모두)
+  mainWindow.webContents.openDevTools();
 
   // 로딩 완료 후 윈도우 표시
   mainWindow.once('ready-to-show', () => {
@@ -186,33 +190,66 @@ function setupIpcHandlers(): void {
       files: string[],
       options: ImageProcessOptions
     ): Promise<BatchProcessResponse> => {
-      // ImageProcessor는 나중에 실제 구현과 연결
-      console.log('배치 처리 시작:', { files: files.length, options });
+      try {
+        console.log('배치 처리 시작:', { files: files.length, options });
 
-      // 진행 상태 업데이트 예시
-      const initialProgress: BatchProcessProgress = {
-        total: files.length,
-        completed: 0,
-        failed: 0,
-        processing: 1,
-        overallProgress: 0,
-        items: [],
-      };
+        // 출력 디렉토리 검증
+        if (!options.outputDir) {
+          return {
+            success: false,
+            message: '출력 디렉토리가 지정되지 않았습니다.',
+          };
+        }
 
-      event.sender.send(IPC_CHANNELS.BATCH_PROGRESS, initialProgress);
+        // 진행 상태 콜백: Renderer로 실시간 전송
+        const onProgress = (progress: BatchProcessProgress) => {
+          event.sender.send(IPC_CHANNELS.BATCH_PROGRESS, progress);
+        };
 
-      // 실제 구현은 ImageProcessor 통합 시 추가
-      return {
-        success: true,
-        message: 'ImageProcessor 구현 대기 중',
-      };
+        // ImageProcessor를 통한 배치 처리 시작
+        const result = await imageProcessor.processBatch(
+          files,
+          options.outputDir,
+          options,
+          onProgress
+        );
+
+        if (result.success) {
+          // 처리 완료 이벤트 전송
+          event.sender.send(IPC_CHANNELS.PROCESSING_COMPLETE, result.data);
+
+          return {
+            success: true,
+            message: `처리 완료: ${result.data.completed}개 성공, ${result.data.failed}개 실패`,
+          };
+        } else {
+          // 에러 이벤트 전송
+          event.sender.send(IPC_CHANNELS.PROCESSING_ERROR, result.error);
+
+          return {
+            success: false,
+            message: result.error,
+          };
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        console.error('배치 처리 실패:', errorMessage);
+
+        // 에러 이벤트 전송
+        event.sender.send(IPC_CHANNELS.PROCESSING_ERROR, errorMessage);
+
+        return {
+          success: false,
+          message: `배치 처리 실패: ${errorMessage}`,
+        };
+      }
     }
   );
 
   // 배치 처리 취소
   ipcMain.on(IPC_CHANNELS.CANCEL_BATCH_PROCESS, () => {
     console.log('배치 처리 취소 요청');
-    // ImageProcessor.cancelBatch() 호출 예정
+    imageProcessor.cancelBatch();
   });
 
   // 파일 정보 가져오기

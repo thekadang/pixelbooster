@@ -14,12 +14,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #333;
+  overflow: hidden; /* body 스크롤 방지 */
 }
 
 .app-container {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* 컨테이너 레벨 스크롤 방지 */
 }
 
 /* 헤더 */
@@ -70,6 +72,8 @@ body {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 .section {
@@ -160,6 +164,26 @@ body {
     transform: scale(1.2);
     opacity: 0.7;
   }
+}
+
+/* 스크롤바 스타일링 */
+.app-main::-webkit-scrollbar {
+  width: 10px;
+}
+
+.app-main::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.app-main::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.5);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.app-main::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.8);
 }
 
 /* 반응형 디자인 */

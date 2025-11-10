@@ -5,8 +5,8 @@
 ## 📊 프로젝트 개요
 
 - **시작일**: 2025-11-10
-- **현재 단계**: Phase 2 진행 중 (TypeScript 마이그레이션 완료)
-- **전체 진행률**: 45%
+- **현재 단계**: Phase 2 진행 중 (ImageProcessor 통합 완료)
+- **전체 진행률**: 50%
 - **예상 완료일**: 2025-12-31
 
 ---
@@ -15,6 +15,8 @@
 
 - [x] Phase 1 완료 ✅
 - [x] Phase 2: 클라이언트 개발 - TypeScript 마이그레이션 완료 🎉
+- [x] Phase 2: ImageProcessor 실제 통합 완료 🎉
+- [x] CSP 정책 및 개발 환경 최적화 완료 ✅
 
 ---
 
@@ -26,7 +28,7 @@
 3. [x] 파일 선택 다이얼로그 ✅
 4. [x] 진행 상태 추적 UI ✅
 5. [x] Main Process TypeScript 마이그레이션 ✅
-6. [ ] ImageProcessor 실제 통합 (배치 처리)
+6. [x] ImageProcessor 실제 통합 (배치 처리) ✅
 
 ### 단기 (This Week)
 1. [x] 기본 이미지 변환 기능 (다양한 포맷 → WEBP) ✅
@@ -35,8 +37,9 @@
 2. [x] 배치 처리 로직 구현 ✅
 3. [x] 설정 패널 UI (포맷 선택, 품질 설정) ✅
 4. [x] IPC 통신 구조 (Main ↔ Renderer) ✅
-5. [ ] 실제 이미지 변환 테스트
-6. [ ] 성능 최적화 (병렬 처리)
+5. [x] ImageProcessor 통합 및 연결 ✅
+6. [ ] 실제 이미지 변환 테스트
+7. [ ] 성능 최적화 (병렬 처리)
 
 ---
 
@@ -86,6 +89,11 @@
   - [x] IPC 핸들러 타입 정의 강화 (types/ipc.ts)
   - [x] 빌드 스크립트 업데이트 (compile:main, watch:main)
   - [x] Production 빌드 테스트 성공
+- [x] **CSP 정책 및 개발 환경 최적화 완료** ✅
+  - [x] index.html CSP 정책 개발/프로덕션 분리
+  - [x] webpack devtool을 eval-source-map으로 변경 (HMR 지원)
+  - [x] App.css 스크롤 영역 분리 및 overflow 설정
+  - [x] 스크롤바 스타일링 적용 (보라색 계열)
 
 ---
 
@@ -112,7 +120,7 @@
 
 ---
 
-### Phase 2: 클라이언트 개발 (3-4주) - 🟢 진행 중 (70% 완료)
+### Phase 2: 클라이언트 개발 (3-4주) - 🟢 진행 중 (80% 완료)
 
 - [x] Electron 앱 기본 구조 ✅
   - [x] Main Process 설정
@@ -144,7 +152,7 @@
   - [x] 빌드 스크립트 업데이트
 
 - [ ] 실제 통합 및 테스트
-  - [ ] ImageProcessor 실제 연결
+  - [x] ImageProcessor 실제 연결 ✅
   - [ ] 실제 이미지 변환 테스트
   - [ ] 성능 최적화 (병렬 처리)
   - [ ] 메모리 관리
@@ -277,12 +285,12 @@
 ## 📊 통계
 
 - **총 작업 항목**: 100+
-- **완료**: 51
-- **진행 중**: 5
-- **대기 중**: 44+
+- **완료**: 57
+- **진행 중**: 3
+- **대기 중**: 40+
 - **Phase 1 완료율**: 100% ✅
-- **Phase 2 완료율**: 70% 🟢
-- **전체 진행률**: 45%
+- **Phase 2 완료율**: 80% 🟢
+- **전체 진행률**: 50%
 
 ---
 
@@ -300,14 +308,14 @@
 3. ✅ 기본 이미지 변환 기능 (완료)
 4. ✅ 배치 처리 및 진행 상태 UI (완료)
 5. ✅ Main Process TypeScript 마이그레이션 (완료)
-6. [ ] ImageProcessor 실제 통합
-7. [ ] 실제 이미지 변환 테스트
+6. ✅ ImageProcessor 실제 통합 (완료) 🎉
+7. [ ] 실제 이미지 변환 테스트 (다음 단계)
 
 ---
 
-**마지막 업데이트**: 2025-11-10 (Main Process TypeScript 마이그레이션 완료! 🎉)
+**마지막 업데이트**: 2025-11-10 (CSP 정책 및 개발 환경 최적화 완료! ✅)
 **업데이트한 사람**: Claude Code
-**다음 업데이트 예정**: Phase 2 완전 완료 (ImageProcessor 실제 통합) 시
+**다음 업데이트 예정**: Phase 2 완전 완료 (실제 이미지 변환 테스트) 시
 
 ---
 
@@ -341,6 +349,41 @@
 - **문서**: Supabase 설정 가이드 작성
 
 자세한 설정 방법은 [docs/development/supabase-setup.md](docs/development/supabase-setup.md)를 참고하세요.
+
+### ImageProcessor 실제 통합 완료 ✅ 🎉
+- **Main Process 통합**: imageProcessor 임포트 및 인스턴스 생성
+- **배치 처리 핸들러**: start-batch-process에 ImageProcessor.processBatch() 연결
+- **진행 상태 업데이트**: onProgress 콜백을 통한 실시간 Renderer 전송
+- **취소 기능**: cancel-batch-process에 ImageProcessor.cancelBatch() 연결
+- **이벤트 발송**:
+  - `batch-progress`: 실시간 진행 상태 업데이트
+  - `processing-complete`: 처리 완료 알림
+  - `processing-error`: 에러 발생 알림
+- **타입 시스템 강화**:
+  - IPC_CHANNELS에 `PROCESSING_COMPLETE`, `PROCESSING_ERROR` 추가
+  - ImageProcessOptions에 `outputDir?` 추가
+  - IpcListeners 타입 정의 완성
+- **에러 처리**: 완전한 try-catch 및 Result 타입 패턴 적용
+- **Production 빌드 테스트**: TypeScript 컴파일 성공 ✅
+
+자세한 구현 내용:
+- **파일 수정**:
+  ```
+  client/main.ts                    # ImageProcessor 통합 및 IPC 핸들러
+  client/src/types/ipc.ts          # IPC 채널 및 타입 정의
+  client/src/types/index.ts        # ImageProcessOptions outputDir 추가
+  client/src/services/image-processor.ts  # BMP 포맷 타입 수정
+  ```
+
+- **통합 흐름**:
+  ```
+  1. Renderer: 변환 시작 버튼 클릭
+  2. Renderer → Main: start-batch-process IPC 요청
+  3. Main: ImageProcessor.processBatch() 실행
+  4. Main → Renderer: batch-progress 실시간 업데이트
+  5. Main → Renderer: processing-complete/processing-error 최종 결과
+  6. Renderer: UI 업데이트 및 사용자 알림
+  ```
 
 ### Main Process TypeScript 마이그레이션 완료 ✅ 🎉
 - **TypeScript 환경 구축**: tsconfig.json, tsconfig.main.json 설정 완료
@@ -412,3 +455,14 @@
   ```
 
 - **Production 빌드 테스트**: 성공 ✅
+
+### CSP 정책 및 개발 환경 최적화 ✅
+- **CSP 정책 분리**: index.html에서 개발/프로덕션 환경별 CSP 설정
+  - 개발 모드: `unsafe-eval` 허용 (HMR 지원)
+  - 프로덕션: 엄격한 보안 정책 적용
+- **Webpack devtool 설정**: `eval-source-map`으로 변경하여 HMR 호환성 확보
+- **스크롤 문제 해결**:
+  - body와 .app-container에 `overflow: hidden` 설정
+  - .app-main에 `overflow-y: auto` 적용하여 스크롤 영역 분리
+  - 스크롤바 스타일링 (보라색 계열, 호버 효과)
+- **결과**: CSP 오류 완전 제거, 스크롤 정상 동작 ✅

@@ -30,6 +30,8 @@ export interface ImageProcessOptions {
   format: ImageFormat;
   /** 품질 (0-100) */
   quality: number;
+  /** 출력 디렉토리 (배치 처리 시 필요) */
+  outputDir?: string;
   /** 리사이즈 너비 (선택사항) */
   width?: number;
   /** 리사이즈 높이 (선택사항) */

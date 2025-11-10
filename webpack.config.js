@@ -20,7 +20,8 @@ module.exports = (env, argv) => {
     mode: isDevelopment ? 'development' : 'production',
 
     // 소스맵 설정 (디버깅 용이)
-    devtool: isDevelopment ? 'eval-source-map' : 'source-map',
+    // eval-source-map 대신 inline-source-map 사용 (CSP 'unsafe-eval' 불필요)
+    devtool: isDevelopment ? 'inline-source-map' : 'source-map',
 
     // 개발 서버 설정
     devServer: {

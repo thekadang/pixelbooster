@@ -24,6 +24,8 @@ export const IPC_CHANNELS = {
   START_BATCH_PROCESS: 'start-batch-process',
   CANCEL_BATCH_PROCESS: 'cancel-batch-process',
   BATCH_PROGRESS: 'batch-progress',
+  PROCESSING_COMPLETE: 'processing-complete',
+  PROCESSING_ERROR: 'processing-error',
 
   // 파일 정보
   GET_FILE_INFO: 'get-file-info',
@@ -108,4 +110,6 @@ export interface IpcEvents {
 export interface IpcListeners {
   [IPC_CHANNELS.APP_INFO_REPLY]: (info: AppInfo) => void;
   [IPC_CHANNELS.BATCH_PROGRESS]: (progress: BatchProcessProgress) => void;
+  [IPC_CHANNELS.PROCESSING_COMPLETE]: (finalProgress: BatchProcessProgress) => void;
+  [IPC_CHANNELS.PROCESSING_ERROR]: (error: string) => void;
 }

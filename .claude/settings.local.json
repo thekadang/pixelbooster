@@ -23,7 +23,9 @@
       "Bash(npm run compile:main:*)",
       "Bash(npm uninstall:*)",
       "Bash(npm start)",
-      "Bash(electron .)"
+      "Bash(electron .)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []
