@@ -35,5 +35,18 @@ exports.IPC_CHANNELS = {
     SUBSCRIPTION_REFRESH: 'subscription-refresh',
     SUBSCRIPTION_CHECK_FORMAT: 'subscription-check-format',
     SUBSCRIPTION_VALIDATE_BATCH: 'subscription-validate-batch',
+    // 로그 관리 (LogManager)
+    LOG_CREATE_FILE: 'log:create-file',
+    LOG_APPEND_BATCH: 'log:append-batch',
+    LOG_GET_HISTORY: 'log:get-history',
+    LOG_EXPORT_EXCEL: 'log:export-excel',
+    // 백업 관리 (BackupManager)
+    BACKUP_FILE: 'backup:file',
+    BACKUP_BATCH: 'backup:batch',
+    BACKUP_RESTORE: 'backup:restore',
+    BACKUP_RESTORE_BATCH: 'backup:restore-batch',
+    BACKUP_LIST: 'backup:list',
+    BACKUP_DELETE: 'backup:delete',
+    BACKUP_PROGRESS: 'backup-progress',
 };
 //# sourceMappingURL=ipc.js.map

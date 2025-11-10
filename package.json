@@ -31,6 +31,7 @@
     "electron": "^39.1.1",
     "electron-builder": "^26.0.12",
     "electron-store": "^11.0.2",
+    "exceljs": "^4.4.0",
     "node-machine-id": "^1.1.12",
     "sharp": "^0.34.5",
     "uuid": "^13.0.0"

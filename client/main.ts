@@ -24,6 +24,7 @@ import {
 import { imageProcessor } from './src/services/image-processor';
 import { authManager } from './src/services/auth-manager';
 import { subscriptionManager } from './src/services/subscription-manager';
+import { LogManager } from './src/services/log-manager';
 
 // 개발 환경 판단
 const isDevelopment: boolean = isDev;
@@ -425,6 +426,79 @@ function setupIpcHandlers(): void {
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
         return { success: false, error: `배치 크기 검증 실패: ${errorMessage}` };
+      }
+    }
+  );
+
+  // ===== 로그 관리 IPC 핸들러 =====
+
+  // LogManager 인스턴스 생성
+  const logManager = new LogManager();
+
+  // 로그 파일 생성
+  ipcMain.handle(
+    IPC_CHANNELS.LOG_CREATE_FILE,
+    async (_event: IpcMainInvokeEvent, date?: string) => {
+      try {
+        const dateObj = date ? new Date(date) : undefined;
+        const result = await logManager.createLogFile(dateObj);
+        return result;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        return { success: false, error: `로그 파일 생성 실패: ${errorMessage}` };
+      }
+    }
+  );
+
+  // 배치 로그 추가
+  ipcMain.handle(
+    IPC_CHANNELS.LOG_APPEND_BATCH,
+    async (_event: IpcMainInvokeEvent, batchProgress: any, logFilePath?: string) => {
+      try {
+        const result = await logManager.appendBatchLog(batchProgress, logFilePath);
+        return result;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        return { success: false, error: `로그 추가 실패: ${errorMessage}` };
+      }
+    }
+  );
+
+  // 로그 이력 조회
+  ipcMain.handle(
+    IPC_CHANNELS.LOG_GET_HISTORY,
+    async (_event: IpcMainInvokeEvent, startDate?: string, endDate?: string) => {
+      try {
+        const start = startDate ? new Date(startDate) : undefined;
+        const end = endDate ? new Date(endDate) : undefined;
+        const result = await logManager.getLogHistory(start, end);
+        return result;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        return { success: false, error: `로그 조회 실패: ${errorMessage}` };
+      }
+    }
+  );
+
+  // Excel 파일 내보내기
+  ipcMain.handle(
+    IPC_CHANNELS.LOG_EXPORT_EXCEL,
+    async (
+      _event: IpcMainInvokeEvent,
+      startDate: string,
+      endDate: string,
+      outputPath: string
+    ) => {
+      try {
+        const result = await logManager.exportToExcel(
+          new Date(startDate),
+          new Date(endDate),
+          outputPath
+        );
+        return result;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        return { success: false, error: `Excel 내보내기 실패: ${errorMessage}` };
       }
     }
   );
