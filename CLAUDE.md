@@ -53,6 +53,8 @@
 - **[개발 환경 설정](docs/development/setup.md)** - 로컬 개발 환경 구축 가이드
 - **[코딩 컨벤션](docs/development/conventions.md)** - 명명 규칙, 코드 스타일, 타입 정의
 - **[Git 워크플로우](docs/development/git-workflow.md)** - 브랜치 전략, 커밋 규칙, 롤백 방법
+- **[Git 자동화 시스템](docs/development/git-automation.md)** - 자동 커밋/푸시, 롤백 기능
+- **[커밋 히스토리](COMMIT_HISTORY.md)** - 전체 커밋 기록 및 롤백 가이드
 
 ### 핵심 컴포넌트
 - **[ImageProcessor](docs/development/image-processor.md)** - 이미지 변환 엔진
