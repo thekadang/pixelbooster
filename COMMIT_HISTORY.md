@@ -2,14 +2,14 @@
 
 > 이 파일은 자동으로 업데이트됩니다. 커밋을 선택하여 해당 시점으로 롤백할 수 있습니다.
 
-**마지막 업데이트**: 2025-11-10 20:30
+**마지막 업데이트**: 2025-11-10 21:00
 
 ---
 
 ## 📊 통계
 
-- **총 커밋 수**: 18
-- **마지막 커밋**: 2025-11-10 20:30
+- **총 커밋 수**: 19
+- **마지막 커밋**: 2025-11-10 21:00
 - **현재 브랜치**: main
 - **원격 저장소**: https://github.com/thekadang/pixelbooster.git
 
@@ -17,7 +17,81 @@
 
 ## 🔖 커밋 목록
 
-### 2025-11-10 20:30 [CURRENT] ⭐ 🎉 ✅
+### 2025-11-10 21:00 [CURRENT] ⭐ 🎉 ✅
+
+**커밋 해시**: `6907137`
+**커밋 주제**: **Phase 4-1 완료 - LogManager 구현 및 Excel 기반 로그 시스템**
+
+**작성자**: thekadang
+**브랜치**: main
+
+**주요 변경사항**:
+- 🎉 **Phase 4-1 완료! LogManager 구현 100%**
+
+**LogManager 서비스 (534 lines)**:
+- createLogFile(): Excel 파일 생성 (작업 기록 + 통계 시트)
+- appendBatchLog(): 배치 처리 결과 자동 로그 추가
+- getLogHistory(): 날짜 범위별 로그 조회
+- exportToExcel(): 통합 Excel 리포트 생성
+
+**Excel 파일 구조**:
+- "작업 기록" 시트: 13개 컬럼 (번호, 일시, 파일명, 경로 하이퍼링크, 크기, 압축률 등)
+- "통계" 시트: 총 파일 수, 성공률, 평균 압축률, 절약 용량 등
+- 보라색 헤더 스타일, 조건부 서식 (성공/실패 색상)
+
+**IPC 통신 추가**:
+- LOG_CREATE_FILE, LOG_APPEND_BATCH, LOG_GET_HISTORY, LOG_EXPORT_EXCEL
+- Main Process에 4개 핸들러 추가
+
+**타입 시스템 확장**:
+- LogEntry, LogStatistics, LogIndex
+- BackupInfo, BackupFilters, BackupProgress, BackupBatchResult, BackupIndex
+- BackupStatus: 'active' | 'restored' | 'deleted'
+
+**패키지 설치**:
+- exceljs (^4.4.0): Excel 파일 생성 및 조작
+- uuid (^9.0.1): 고유 ID 생성
+
+**문서 작성**:
+- docs/features/log-system.md: 로그 시스템 기능 명세
+- docs/features/backup-system.md: 백업 시스템 기능 명세
+- docs/development/log-manager.md: LogManager 개발 가이드
+- docs/development/backup-manager.md: BackupManager 개발 가이드
+
+**파일 변경**:
+```
+생성: client/src/services/log-manager.ts (534 lines)
+생성: docs/features/log-system.md, backup-system.md
+생성: docs/development/log-manager.md, backup-manager.md
+수정: client/src/types/index.ts (타입 추가)
+수정: client/src/types/ipc.ts (IPC 채널 추가)
+수정: client/main.ts (LogManager IPC 핸들러)
+수정: package.json (패키지 추가)
+수정: task.md (Phase 4-1 완료, 75% 진행률)
+
+12 files changed, 2776 insertions(+), 16 deletions(-)
+```
+
+**검증 완료**:
+- TypeScript 컴파일: 성공 ✅
+- 개발 서버: 정상 실행 중 ✅
+- IPC 핸들러: 4개 모두 정상 등록 ✅
+
+**다음 단계**:
+- Phase 4-2: BackupManager 구현
+- ImageProcessor 로그 통합 (자동 로그)
+- UI 컴포넌트 (LogViewer)
+
+**롤백 방법**:
+```bash
+git checkout 6907137
+# 또는
+git reset --hard 6907137
+```
+
+---
+
+### 2025-11-10 20:30 🎉 ✅
 
 **커밋 해시**: `653dfdb`
 **커밋 주제**: **Phase 3-3 완료! 기기 인증 시스템 구축 및 배포 🎉**
