@@ -2,14 +2,14 @@
 
 > 이 파일은 자동으로 업데이트됩니다. 커밋을 선택하여 해당 시점으로 롤백할 수 있습니다.
 
-**마지막 업데이트**: 2025-11-10 14:05
+**마지막 업데이트**: 2025-11-10 15:40
 
 ---
 
 ## 📊 통계
 
-- **총 커밋 수**: 4
-- **마지막 커밋**: 2025-11-10 14:05
+- **총 커밋 수**: 5
+- **마지막 커밋**: 2025-11-10 15:40
 - **현재 브랜치**: main
 - **원격 저장소**: https://github.com/thekadang/pixelbooster.git
 
@@ -17,7 +17,66 @@
 
 ## 🔖 커밋 목록
 
-### 2025-11-10 14:05 [CURRENT] ⭐
+### 2025-11-10 15:40 [CURRENT] ⭐
+
+**커밋 해시**: `430914f`
+**작성자**: thekadang
+**브랜치**: main
+
+**주요 변경사항**:
+- 🚀 Supabase 백엔드 구축 완료 및 프로젝트 기반 구축
+- Supabase 프로젝트 생성 및 데이터베이스 스키마 구축
+- 9개 테이블 생성 (subscriptions, registered_devices, affiliates 등)
+- RLS(Row Level Security) 정책 설정
+- 환경 변수 설정 (.env 파일)
+- Supabase 연결 테스트 성공
+
+**프로젝트 구조**:
+- 폴더 구조 생성: client/, server/, admin/, shared/, supabase/
+- package.json 초기 설정
+- 의존성 설치: @supabase/supabase-js, dotenv
+
+**문서 작성**:
+- Supabase 설정 가이드 (docs/development/supabase-setup.md)
+- MVP 가이드 (docs/development/mvp-guide.md)
+- 확장성 가이드 (docs/architecture/extensibility-guide.md)
+- 보안 아키텍처 (docs/architecture/security-architecture.md)
+- 구독 서비스 설계 (docs/architecture/subscription-service.md)
+- 결제 API 설계 (docs/api/payment-api.md)
+
+**진행 상황**:
+- Phase 1 완료율: 60% → 90%
+- 전체 진행률: 14% → 23%
+- 완료 작업: 14개 → 23개
+
+**변경된 파일**: 14개 (10개 신규, 4개 수정)
+- `.env.example` (신규)
+- `package.json` (신규)
+- `test-supabase-connection.js` (신규)
+- `supabase/migrations/20251110_initial_schema.sql` (신규)
+- `docs/development/supabase-setup.md` (신규)
+- `docs/development/mvp-guide.md` (신규)
+- `docs/architecture/extensibility-guide.md` (신규)
+- `docs/architecture/security-architecture.md` (신규)
+- `docs/architecture/subscription-service.md` (신규)
+- `docs/api/payment-api.md` (신규)
+- `docs/architecture/database-schema.md` (수정)
+- `docs/architecture/system-overview.md` (수정)
+- `task.md` (수정)
+- `.claude/settings.local.json` (수정)
+
+**롤백 명령**:
+```bash
+# 이 시점으로 확인 (임시, 안전)
+git checkout 430914f
+
+# 이 시점으로 완전히 되돌리기 (주의!)
+git reset --hard 430914f
+```
+
+---
+
+### 2025-11-10 14:05
 
 **커밋 해시**: `ad18acb`
 **작성자**: thekadang
