@@ -12,7 +12,12 @@
       "Bash(git push:*)",
       "Bash(git log:*)",
       "Bash(npm install)",
-      "Bash(npm run test:supabase:*)"
+      "Bash(npm run test:supabase:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(taskkill:*)",
+      "Bash(pkill node:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

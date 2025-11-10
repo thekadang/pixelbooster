@@ -16,9 +16,11 @@ client/build/
 client/out/
 admin/dist/
 admin/build/
+dist-electron/
 
 # Electron 빌드
 client/release/
+build/
 *.dmg
 *.exe
 *.zip

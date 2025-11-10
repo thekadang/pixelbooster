@@ -45,9 +45,10 @@
 ## 🏗️ 기술 스택
 
 ### 클라이언트 (Desktop App)
-- **프레임워크**: Electron 28+
-- **UI**: React 18 + TypeScript
-- **이미지 처리**: Sharp
+- **프레임워크**: Electron 39+
+- **UI**: React 19 + JSX
+- **번들러**: Webpack 5
+- **이미지 처리**: Sharp 0.34+
 - **Excel**: ExcelJS
 - **다국어**: i18next
 
