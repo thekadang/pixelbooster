@@ -2,14 +2,14 @@
 
 > 이 파일은 자동으로 업데이트됩니다. 커밋을 선택하여 해당 시점으로 롤백할 수 있습니다.
 
-**마지막 업데이트**: 2025-11-10 20:11
+**마지막 업데이트**: 2025-11-10 20:26
 
 ---
 
 ## 📊 통계
 
-- **총 커밋 수**: 21
-- **마지막 커밋**: 2025-11-10 20:11
+- **총 커밋 수**: 32
+- **마지막 커밋**: 2025-11-10 20:26
 - **현재 브랜치**: main
 - **원격 저장소**: https://github.com/thekadang/pixelbooster.git
 
@@ -17,7 +17,70 @@
 
 ## 🔖 커밋 목록
 
-### 2025-11-10 20:11 [CURRENT] ⭐ 🎉 ✅
+### 2025-11-10 20:26 [CURRENT] ⭐ 🎉 ✅
+
+**커밋 해시**: `2a50199`
+**커밋 주제**: **Phase 4-4 완료 - LogViewer & BackupViewer UI 컴포넌트 구현**
+
+**작성자**: thekadang
+**브랜치**: main
+
+**주요 변경사항**:
+- 🎉 **Phase 4-4 완료! 로그 및 백업 관리 UI 구현 (90% 진행)**
+
+**1. LogViewer 컴포넌트 구현 (client/src/components/LogViewer.jsx)**:
+- 작업 로그 조회 및 필터링 (날짜 범위, 포맷)
+- 통계 카드 4개 (총 파일 수, 성공률, 압축률, 절약 용량)
+- 로그 테이블 (정렬, 상세 정보 표시)
+- Excel 로그 파일 조회 IPC 통신 (log:get-history)
+- 날짜 및 파일 포맷 필터링 기능
+
+**2. BackupViewer 컴포넌트 구현 (client/src/components/BackupViewer.jsx)**:
+- 백업 목록 조회 및 필터링 (날짜, 상태)
+- 통계 카드 4개 (총 백업, 활성, 복원, 사용 공간)
+- 백업 카드 그리드 레이아웃
+- 백업 복원 기능 (backup:restore)
+- 백업 삭제 기능 (backup:delete)
+- 상태 배지 (활성, 복원됨, 삭제됨)
+
+**3. App.jsx 탭 네비게이션 추가**:
+- 탭 상태 관리 (useState, activeTab)
+- 3개 탭: 변환(converter), 로그(logs), 백업(backups)
+- LogViewer, BackupViewer 컴포넌트 import 및 렌더링
+- 조건부 렌더링으로 탭 전환
+
+**4. 스타일링 완료**:
+- LogViewer.css: 필터 섹션, 통계 카드, 로그 테이블 스타일
+- BackupViewer.css: 백업 그리드, 카드 레이아웃, 액션 버튼
+- App.css: 탭 네비게이션 스타일 (hover, active 상태)
+- Purple gradient 테마 일관성 (#667eea → #764ba2)
+- 반응형 디자인 (768px, 480px breakpoints)
+
+**5. 문서 업데이트**:
+- task.md: Phase 4-4 완료 상태 업데이트 (90%)
+- CLAUDE.md: 프로젝트 상태 업데이트
+
+**검증**:
+- ✅ TypeScript 컴파일: 0 errors
+- ✅ Webpack 컴파일: 성공
+- ✅ Hot Module Replacement: 정상 작동
+- ✅ IPC 핸들러 연결 확인
+
+**파일 변경**:
+- 신규: client/src/components/LogViewer.jsx (385줄)
+- 신규: client/src/components/LogViewer.css (455줄)
+- 신규: client/src/components/BackupViewer.jsx (388줄)
+- 신규: client/src/components/BackupViewer.css (455줄)
+- 수정: client/src/App.jsx (탭 네비게이션 추가)
+- 수정: client/src/App.css (탭 스타일링 추가)
+- 수정: task.md (진행률 90%)
+- 수정: CLAUDE.md (프로젝트 상태)
+
+**다음 단계**: Phase 4 나머지 (어필리에이트 시스템, 관리자 대시보드)
+
+---
+
+### 2025-11-10 20:11 🎉 ✅
 
 **커밋 해시**: `55a3f9a`
 **커밋 주제**: **Phase 4-3 완료 - ImageProcessor 통합 (백업/변환/로그 자동화)**
