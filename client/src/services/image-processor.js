@@ -114,7 +114,7 @@ class ImageProcessor {
         }
     }
     /**
-     * 배치 처리 (다중 파일)
+     * 배치 처리 (다중 파일) - 병렬 처리 최적화
      *
      * @param files - 입력 파일 경로 배열
      * @param outputDir - 출력 디렉토리
@@ -147,43 +147,58 @@ class ImageProcessor {
             if (onProgress) {
                 onProgress(this.currentBatch);
             }
-            // 순차적 처리 (나중에 병렬 처리로 개선 가능)
-            for (const item of items) {
-                if (this.isCancelled) {
+            // 병렬 처리 제한 (동시에 처리할 최대 파일 수)
+            const MAX_CONCURRENT = 4;
+            const queue = [...items];
+            const processing = [];
+            // 단일 항목 처리 함수
+            const processItem = async (item) => {
+                if (this.isCancelled || !this.currentBatch) {
                     item.status = 'failed';
                     item.error = '사용자가 취소했습니다';
-                    this.currentBatch.failed++;
-                    continue;
+                    if (this.currentBatch) {
+                        this.currentBatch.failed++;
+                    }
+                    this.updateProgress(onProgress);
+                    return;
                 }
                 // 항목 처리 시작
                 item.status = 'processing';
                 item.startTime = Date.now();
                 this.currentBatch.processing++;
-                // 진행 상태 업데이트
-                if (onProgress) {
-                    onProgress(this.currentBatch);
-                }
+                this.updateProgress(onProgress);
                 // 이미지 처리
                 const result = await this.processImage(item.inputPath, item.outputPath, options);
                 // 처리 완료
                 item.endTime = Date.now();
-                this.currentBatch.processing--;
-                if (result.success) {
-                    item.status = 'completed';
-                    item.progress = 100;
-                    item.convertedSize = result.data.size;
-                    this.currentBatch.completed++;
+                if (this.currentBatch) {
+                    this.currentBatch.processing--;
+                    if (result.success) {
+                        item.status = 'completed';
+                        item.progress = 100;
+                        item.convertedSize = result.data.size;
+                        this.currentBatch.completed++;
+                    }
+                    else {
+                        item.status = 'failed';
+                        item.error = result.error;
+                        this.currentBatch.failed++;
+                    }
                 }
-                else {
-                    item.status = 'failed';
-                    item.error = result.error;
-                    this.currentBatch.failed++;
+                this.updateProgress(onProgress);
+            };
+            // 병렬 처리 시작
+            while (queue.length > 0 || processing.length > 0) {
+                // 동시 처리 제한까지 새로운 작업 추가
+                while (processing.length < MAX_CONCURRENT && queue.length > 0) {
+                    const item = queue.shift();
+                    const promise = processItem(item);
+                    processing.push(promise);
                 }
-                // 전체 진행률 계산
-                this.currentBatch.overallProgress = Math.round(((this.currentBatch.completed + this.currentBatch.failed) / this.currentBatch.total) * 100);
-                // 진행 상태 콜백 호출
-                if (onProgress) {
-                    onProgress(this.currentBatch);
+                // 하나라도 완료될 때까지 대기
+                if (processing.length > 0) {
+                    const completed = await Promise.race(processing.map((p, index) => p.then(() => index)));
+                    processing.splice(completed, 1);
                 }
             }
             return {
@@ -196,6 +211,21 @@ class ImageProcessor {
                 success: false,
                 error: `배치 처리 실패: ${error.message}`,
             };
+        }
+    }
+    /**
+     * 진행 상태 업데이트 (내부 헬퍼 함수)
+     *
+     * @param onProgress - 진행 상태 콜백
+     */
+    updateProgress(onProgress) {
+        if (!this.currentBatch)
+            return;
+        // 전체 진행률 계산
+        this.currentBatch.overallProgress = Math.round(((this.currentBatch.completed + this.currentBatch.failed) / this.currentBatch.total) * 100);
+        // 진행 상태 콜백 호출
+        if (onProgress) {
+            onProgress(this.currentBatch);
         }
     }
     /**

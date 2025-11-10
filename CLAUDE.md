@@ -76,8 +76,8 @@ docs/     - 전체 기술 문서
 ## 🎨 클라이언트 (데스크톱 앱)
 
 ### 기능 문서
+- **[이미지 처리 로직](docs/features/image-processing.md)** - Sharp 기반 변환 로직 및 병렬 배치 처리 ✅
 - **[UI/UX 가이드](docs/features/ui-ux-guide.md)** - 디자인 원칙 및 컴포넌트 구조
-- **[이미지 처리 로직](docs/features/image-processing.md)** - Sharp 기반 변환 로직 및 배치 처리
 - **[구독 등급별 기능](docs/features/subscription-tiers.md)** - Free/Basic/Pro 기능 차이 및 구현
 - **[로그 시스템](docs/features/log-system.md)** - Excel 기반 작업 로그 관리
 - **[백업 시스템](docs/features/backup-system.md)** - 원본 파일 백업 및 복원
