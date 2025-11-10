@@ -54,5 +54,16 @@ exports.IPC_CHANNELS = {
     AFFILIATE_LINK_TO_USER: 'affiliate:link-to-user',
     AFFILIATE_GET_STATS: 'affiliate:get-stats',
     AFFILIATE_GET_REFERRALS: 'affiliate:get-referrals',
+    // 자동 업데이트 관리 (AutoUpdater)
+    UPDATE_CHECK: 'update:check',
+    UPDATE_DOWNLOAD: 'update:download',
+    UPDATE_INSTALL: 'update:install',
+    UPDATE_GET_VERSION: 'update:get-version',
+    UPDATE_CHECKING: 'update:checking',
+    UPDATE_AVAILABLE: 'update:available',
+    UPDATE_NOT_AVAILABLE: 'update:not-available',
+    UPDATE_DOWNLOAD_PROGRESS: 'update:download-progress',
+    UPDATE_DOWNLOADED: 'update:downloaded',
+    UPDATE_ERROR: 'update:error',
 };
 //# sourceMappingURL=ipc.js.map

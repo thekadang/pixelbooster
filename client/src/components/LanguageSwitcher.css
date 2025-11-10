@@ -1,0 +1,54 @@
+/* client/src/components/LanguageSwitcher.css */
+
+.language-switcher {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.lang-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.lang-btn.active {
+  opacity: 1;
+  border-color: white;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.5);
+}
+
+.lang-btn:active {
+  transform: translateY(0);
+}
+
+/* 다크 모드 지원 (필요 시) */
+@media (prefers-color-scheme: dark) {
+  .lang-btn {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  }
+}
+
+/* 작은 화면 대응 */
+@media (max-width: 480px) {
+  .lang-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}

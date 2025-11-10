@@ -65,6 +65,18 @@ export const IPC_CHANNELS = {
   AFFILIATE_LINK_TO_USER: 'affiliate:link-to-user',
   AFFILIATE_GET_STATS: 'affiliate:get-stats',
   AFFILIATE_GET_REFERRALS: 'affiliate:get-referrals',
+
+  // 자동 업데이트 관리 (AutoUpdater)
+  UPDATE_CHECK: 'update:check',
+  UPDATE_DOWNLOAD: 'update:download',
+  UPDATE_INSTALL: 'update:install',
+  UPDATE_GET_VERSION: 'update:get-version',
+  UPDATE_CHECKING: 'update:checking',
+  UPDATE_AVAILABLE: 'update:available',
+  UPDATE_NOT_AVAILABLE: 'update:not-available',
+  UPDATE_DOWNLOAD_PROGRESS: 'update:download-progress',
+  UPDATE_DOWNLOADED: 'update:downloaded',
+  UPDATE_ERROR: 'update:error',
 } as const;
 
 /**
@@ -183,6 +195,25 @@ export interface SubscriptionInfo {
 }
 
 /**
+ * 업데이트 정보 타입
+ */
+export interface UpdateInfo {
+  version: string;
+  releaseNotes?: string;
+  releaseDate?: string;
+}
+
+/**
+ * 업데이트 다운로드 진행률 타입
+ */
+export interface UpdateDownloadProgress {
+  percent: number;
+  transferred: number;
+  total: number;
+  bytesPerSecond: number;
+}
+
+/**
  * IPC 리스너 타입 정의
  */
 export interface IpcListeners {
@@ -191,4 +222,10 @@ export interface IpcListeners {
   [IPC_CHANNELS.PROCESSING_COMPLETE]: (finalProgress: BatchProcessProgress) => void;
   [IPC_CHANNELS.PROCESSING_ERROR]: (error: string) => void;
   [IPC_CHANNELS.AUTH_STATE_CHANGED]: (state: AuthState) => void;
+  [IPC_CHANNELS.UPDATE_CHECKING]: () => void;
+  [IPC_CHANNELS.UPDATE_AVAILABLE]: (info: UpdateInfo) => void;
+  [IPC_CHANNELS.UPDATE_NOT_AVAILABLE]: (info: UpdateInfo) => void;
+  [IPC_CHANNELS.UPDATE_DOWNLOAD_PROGRESS]: (progress: UpdateDownloadProgress) => void;
+  [IPC_CHANNELS.UPDATE_DOWNLOADED]: (info: UpdateInfo) => void;
+  [IPC_CHANNELS.UPDATE_ERROR]: (error: { message: string }) => void;
 }

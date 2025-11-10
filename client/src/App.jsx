@@ -1,5 +1,6 @@
 // App.jsx - 메인 React 컴포넌트
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import DropZone from './components/DropZone';
 import SettingsPanel from './components/SettingsPanel';
 import ProgressTracker from './components/ProgressTracker';
@@ -7,9 +8,14 @@ import AuthModal from './components/AuthModal';
 import LogViewer from './components/LogViewer';
 import BackupViewer from './components/BackupViewer';
 import AffiliatePanel from './components/AffiliatePanel';
+import LanguageSwitcher from './components/LanguageSwitcher';
+import './i18n'; // i18next 초기화
 import './App.css';
 
 const App = () => {
+  // 다국어 지원
+  const { t } = useTranslation();
+
   // 탭 상태
   const [activeTab, setActiveTab] = useState('converter');
 
@@ -271,11 +277,14 @@ const App = () => {
         <div className="header-left">
           <h1 className="app-title">
             <span className="emoji">🚀</span>
-            픽셀부스터
+            {t('app.title')}
           </h1>
-          <p className="app-subtitle">이미지 최적화 데스크톱 애플리케이션</p>
+          <p className="app-subtitle">{t('app.subtitle')}</p>
         </div>
         <div className="header-right">
+          {/* 언어 전환 버튼 */}
+          <LanguageSwitcher />
+
           {authState.isAuthenticated ? (
             <div className="user-info">
               <span className="user-email">{authState.user?.email}</span>
@@ -285,12 +294,12 @@ const App = () => {
                 </span>
               )}
               <button className="logout-button" onClick={handleLogout}>
-                로그아웃
+                {t('auth.logout')}
               </button>
             </div>
           ) : (
             <button className="login-button" onClick={handleOpenAuthModal}>
-              로그인
+              {t('auth.login')}
             </button>
           )}
         </div>
@@ -303,28 +312,28 @@ const App = () => {
           onClick={() => setActiveTab('converter')}
         >
           <span className="tab-icon">🚀</span>
-          변환
+          {t('tabs.converter')}
         </button>
         <button
           className={`tab-button ${activeTab === 'logs' ? 'active' : ''}`}
           onClick={() => setActiveTab('logs')}
         >
           <span className="tab-icon">📊</span>
-          로그
+          {t('tabs.logs')}
         </button>
         <button
           className={`tab-button ${activeTab === 'backups' ? 'active' : ''}`}
           onClick={() => setActiveTab('backups')}
         >
           <span className="tab-icon">💾</span>
-          백업
+          {t('tabs.backups')}
         </button>
         <button
           className={`tab-button ${activeTab === 'affiliate' ? 'active' : ''}`}
           onClick={() => setActiveTab('affiliate')}
         >
           <span className="tab-icon">🔗</span>
-          어필리에이트
+          {t('tabs.affiliate')}
         </button>
       </nav>
 
@@ -353,7 +362,7 @@ const App = () => {
                     onClick={handleStartConversion}
                     disabled={isProcessing}
                   >
-                    {isProcessing ? '🔄 변환 중...' : '🚀 변환 시작'}
+                    {isProcessing ? `🔄 ${t('converter.processing')}` : `🚀 ${t('converter.startConversion')}`}
                   </button>
                 </div>
               </section>

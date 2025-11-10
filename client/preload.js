@@ -63,4 +63,38 @@ contextBridge.exposeInMainWorld('electronAPI', {
 } as ElectronAPI);
 */
 console.log('Preload script loaded (TypeScript)');
+// contextIsolation: false이므로 window 객체에 직접 autoUpdate API 노출
+if (typeof window !== 'undefined') {
+    const { ipcRenderer } = require('electron');
+    window.autoUpdate = {
+        // 업데이트 확인
+        checkForUpdates: () => ipcRenderer.invoke('update:check'),
+        // 업데이트 다운로드
+        downloadUpdate: () => ipcRenderer.invoke('update:download'),
+        // 업데이트 설치
+        installUpdate: () => ipcRenderer.invoke('update:install'),
+        // 현재 버전 조회
+        getCurrentVersion: () => ipcRenderer.invoke('update:get-version'),
+        // 이벤트 리스너
+        onUpdateChecking: (callback) => {
+            ipcRenderer.on('update:checking', callback);
+        },
+        onUpdateAvailable: (callback) => {
+            ipcRenderer.on('update:available', (_event, info) => callback(info));
+        },
+        onUpdateNotAvailable: (callback) => {
+            ipcRenderer.on('update:not-available', (_event, info) => callback(info));
+        },
+        onDownloadProgress: (callback) => {
+            ipcRenderer.on('update:download-progress', (_event, progress) => callback(progress));
+        },
+        onUpdateDownloaded: (callback) => {
+            ipcRenderer.on('update:downloaded', (_event, info) => callback(info));
+        },
+        onUpdateError: (callback) => {
+            ipcRenderer.on('update:error', (_event, error) => callback(error));
+        }
+    };
+    console.log('[Preload] autoUpdate API 노출 완료');
+}
 //# sourceMappingURL=preload.js.map

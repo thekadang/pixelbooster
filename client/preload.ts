@@ -42,6 +42,24 @@ interface ElectronAPI {
   getFileInfo: (filePath: string) => Promise<Result<FileInfo>>;
 }
 
+// 자동 업데이트 API 타입 정의
+declare global {
+  interface Window {
+    autoUpdate: {
+      checkForUpdates: () => Promise<{ success: boolean; available?: boolean; updateInfo?: any }>;
+      downloadUpdate: () => Promise<{ success: boolean; message?: string }>;
+      installUpdate: () => Promise<{ success: boolean; message?: string }>;
+      getCurrentVersion: () => Promise<{ success: boolean; version?: string }>;
+      onUpdateChecking: (callback: () => void) => void;
+      onUpdateAvailable: (callback: (info: any) => void) => void;
+      onUpdateNotAvailable: (callback: (info: any) => void) => void;
+      onDownloadProgress: (callback: (progress: any) => void) => void;
+      onUpdateDownloaded: (callback: (info: any) => void) => void;
+      onUpdateError: (callback: (error: any) => void) => void;
+    };
+  }
+}
+
 // contextBridge를 통해 안전하게 API 노출 (향후 contextIsolation: true 시 활성화)
 /*
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -101,6 +119,52 @@ contextBridge.exposeInMainWorld('electronAPI', {
 */
 
 console.log('Preload script loaded (TypeScript)');
+
+// contextIsolation: false이므로 window 객체에 직접 autoUpdate API 노출
+if (typeof window !== 'undefined') {
+  const { ipcRenderer } = require('electron');
+
+  (window as any).autoUpdate = {
+    // 업데이트 확인
+    checkForUpdates: () => ipcRenderer.invoke('update:check'),
+
+    // 업데이트 다운로드
+    downloadUpdate: () => ipcRenderer.invoke('update:download'),
+
+    // 업데이트 설치
+    installUpdate: () => ipcRenderer.invoke('update:install'),
+
+    // 현재 버전 조회
+    getCurrentVersion: () => ipcRenderer.invoke('update:get-version'),
+
+    // 이벤트 리스너
+    onUpdateChecking: (callback: () => void) => {
+      ipcRenderer.on('update:checking', callback);
+    },
+
+    onUpdateAvailable: (callback: (info: any) => void) => {
+      ipcRenderer.on('update:available', (_event: any, info: any) => callback(info));
+    },
+
+    onUpdateNotAvailable: (callback: (info: any) => void) => {
+      ipcRenderer.on('update:not-available', (_event: any, info: any) => callback(info));
+    },
+
+    onDownloadProgress: (callback: (progress: any) => void) => {
+      ipcRenderer.on('update:download-progress', (_event: any, progress: any) => callback(progress));
+    },
+
+    onUpdateDownloaded: (callback: (info: any) => void) => {
+      ipcRenderer.on('update:downloaded', (_event: any, info: any) => callback(info));
+    },
+
+    onUpdateError: (callback: (error: any) => void) => {
+      ipcRenderer.on('update:error', (_event: any, error: any) => callback(error));
+    }
+  };
+
+  console.log('[Preload] autoUpdate API 노출 완료');
+}
 
 // 타입 선언을 위한 글로벌 확장
 declare global {

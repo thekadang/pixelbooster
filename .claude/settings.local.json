@@ -31,7 +31,8 @@
       "Bash(echo:*)",
       "Bash(.env)",
       "Bash(git rm:*)",
-      "Bash(supabase login:*)"
+      "Bash(supabase login:*)",
+      "Bash(node scripts/generate-temp-icon.js:*)"
     ],
     "deny": [],
     "ask": []

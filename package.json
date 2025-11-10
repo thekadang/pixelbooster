@@ -15,7 +15,11 @@
     "build:electron": "npm run build && electron-builder",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
-    "build:linux": "npm run build && electron-builder --linux"
+    "build:linux": "npm run build && electron-builder --linux",
+    "publish:win": "npm run build && electron-builder --win --publish always",
+    "publish:mac": "npm run build && electron-builder --mac --publish always",
+    "publish:linux": "npm run build && electron-builder --linux --publish always",
+    "publish:all": "npm run build && electron-builder --win --mac --linux --publish always"
   },
   "keywords": [
     "image",
@@ -31,8 +35,13 @@
     "electron": "^39.1.1",
     "electron-builder": "^26.0.12",
     "electron-store": "^11.0.2",
+    "electron-updater": "^6.6.2",
     "exceljs": "^4.4.0",
+    "i18next": "^25.6.1",
+    "i18next-browser-languagedetector": "^8.2.0",
+    "i18next-http-backend": "^3.0.2",
     "node-machine-id": "^1.1.12",
+    "react-i18next": "^16.2.4",
     "sharp": "^0.34.5",
     "uuid": "^13.0.0"
   },
@@ -77,6 +86,15 @@
       "node_modules/**/*",
       "package.json"
     ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "thekadang",
+        "repo": "pixelbooster",
+        "private": false,
+        "releaseType": "release"
+      }
+    ],
     "win": {
       "target": [
         "nsis"
@@ -85,9 +103,11 @@
     },
     "mac": {
       "target": [
-        "dmg"
+        "dmg",
+        "zip"
       ],
-      "icon": "build/icon.icns"
+      "icon": "build/icon.icns",
+      "category": "public.app-category.graphics-design"
     },
     "linux": {
       "target": [

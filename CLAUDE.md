@@ -134,7 +134,7 @@ docs/     - 전체 기술 문서
 ## 📦 배포
 
 - **[빌드 프로세스](docs/deployment/build-process.md)** - Windows/Mac 빌드 및 패키징
-- **[자동 업데이트](docs/deployment/auto-update.md)** - electron-updater 연동
+- **[자동 업데이트](docs/deployment/auto-update.md)** - electron-updater 연동 ✅ (구현 완료)
 - **[배포 전략](docs/deployment/deployment-strategy.md)** - 릴리스 프로세스
 
 ---

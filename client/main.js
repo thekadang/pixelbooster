@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
+const electron_updater_1 = require("electron-updater");
 const path = __importStar(require("path"));
 const url = __importStar(require("url"));
 const fs = __importStar(require("fs/promises"));
@@ -113,6 +114,13 @@ function createMainWindow() {
 electron_1.app.whenReady().then(() => {
     createMainWindow();
     setupIpcHandlers();
+    setupAutoUpdater();
+    // 프로덕션 환경에서만 자동 업데이트 확인 (5초 후)
+    if (!isDevelopment) {
+        setTimeout(() => {
+            electron_updater_1.autoUpdater.checkForUpdatesAndNotify();
+        }, 5000);
+    }
     // macOS: 독에서 클릭 시 윈도우 재생성
     electron_1.app.on('activate', () => {
         if (electron_1.BrowserWindow.getAllWindows().length === 0) {
@@ -633,5 +641,121 @@ function setupIpcHandlers() {
             return { success: false, error: `추천 내역 조회 실패: ${errorMessage}` };
         }
     });
+    // ============================
+    // 자동 업데이트 관리 IPC 핸들러
+    // ============================
+    // 업데이트 확인
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.UPDATE_CHECK, async () => {
+        if (isDevelopment) {
+            return { success: false, message: '개발 환경에서는 업데이트를 확인할 수 없습니다.' };
+        }
+        try {
+            const result = await electron_updater_1.autoUpdater.checkForUpdates();
+            return {
+                success: true,
+                available: result !== null,
+                updateInfo: result?.updateInfo
+            };
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `업데이트 확인 실패: ${errorMessage}` };
+        }
+    });
+    // 업데이트 다운로드
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.UPDATE_DOWNLOAD, async () => {
+        try {
+            await electron_updater_1.autoUpdater.downloadUpdate();
+            return { success: true, message: '업데이트 다운로드 시작' };
+        }
+        catch (error) {
+            const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+            return { success: false, error: `업데이트 다운로드 실패: ${errorMessage}` };
+        }
+    });
+    // 업데이트 설치 및 재시작
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.UPDATE_INSTALL, () => {
+        // 앱 종료 후 업데이트 설치
+        electron_updater_1.autoUpdater.quitAndInstall(false, true);
+        return { success: true, message: '앱을 재시작하여 업데이트를 설치합니다.' };
+    });
+    // 현재 버전 조회
+    electron_1.ipcMain.handle(ipc_1.IPC_CHANNELS.UPDATE_GET_VERSION, () => {
+        return { success: true, version: electron_1.app.getVersion() };
+    });
+}
+/**
+ * 자동 업데이트 시스템 설정
+ */
+function setupAutoUpdater() {
+    // 개발 환경에서는 자동 업데이트 비활성화
+    if (isDevelopment) {
+        electron_updater_1.autoUpdater.autoDownload = false;
+        electron_updater_1.autoUpdater.autoInstallOnAppQuit = false;
+        console.log('[AutoUpdater] 개발 환경: 자동 업데이트 비활성화');
+        return;
+    }
+    // 자동 다운로드 활성화
+    electron_updater_1.autoUpdater.autoDownload = false; // 사용자 확인 후 다운로드
+    electron_updater_1.autoUpdater.autoInstallOnAppQuit = true; // 앱 종료 시 자동 설치
+    // 업데이트 확인 시작
+    electron_updater_1.autoUpdater.on('checking-for-update', () => {
+        console.log('[AutoUpdater] 업데이트 확인 중...');
+        mainWindow?.webContents.send(ipc_1.IPC_CHANNELS.UPDATE_CHECKING);
+    });
+    // 업데이트 발견
+    electron_updater_1.autoUpdater.on('update-available', (info) => {
+        console.log('[AutoUpdater] 업데이트 발견:', info.version);
+        const updateInfo = {
+            version: info.version,
+            releaseNotes: typeof info.releaseNotes === 'string'
+                ? info.releaseNotes
+                : Array.isArray(info.releaseNotes)
+                    ? info.releaseNotes.map(note => typeof note === 'string' ? note : note.note).join('\n')
+                    : undefined,
+            releaseDate: info.releaseDate,
+        };
+        mainWindow?.webContents.send(ipc_1.IPC_CHANNELS.UPDATE_AVAILABLE, updateInfo);
+    });
+    // 업데이트 없음
+    electron_updater_1.autoUpdater.on('update-not-available', (info) => {
+        console.log('[AutoUpdater] 최신 버전 사용 중:', info.version);
+        const updateInfo = {
+            version: info.version,
+        };
+        mainWindow?.webContents.send(ipc_1.IPC_CHANNELS.UPDATE_NOT_AVAILABLE, updateInfo);
+    });
+    // 업데이트 오류
+    electron_updater_1.autoUpdater.on('error', (err) => {
+        console.error('[AutoUpdater] 업데이트 오류:', err);
+        mainWindow?.webContents.send(ipc_1.IPC_CHANNELS.UPDATE_ERROR, {
+            message: err.message,
+        });
+    });
+    // 다운로드 진행률
+    electron_updater_1.autoUpdater.on('download-progress', (progressObj) => {
+        console.log(`[AutoUpdater] 다운로드 진행: ${progressObj.percent.toFixed(2)}% (${progressObj.bytesPerSecond} bytes/s)`);
+        mainWindow?.webContents.send(ipc_1.IPC_CHANNELS.UPDATE_DOWNLOAD_PROGRESS, {
+            percent: progressObj.percent,
+            transferred: progressObj.transferred,
+            total: progressObj.total,
+            bytesPerSecond: progressObj.bytesPerSecond,
+        });
+    });
+    // 다운로드 완료
+    electron_updater_1.autoUpdater.on('update-downloaded', (info) => {
+        console.log('[AutoUpdater] 업데이트 다운로드 완료:', info.version);
+        const updateInfo = {
+            version: info.version,
+            releaseNotes: typeof info.releaseNotes === 'string'
+                ? info.releaseNotes
+                : Array.isArray(info.releaseNotes)
+                    ? info.releaseNotes.map(note => typeof note === 'string' ? note : note.note).join('\n')
+                    : undefined,
+            releaseDate: info.releaseDate,
+        };
+        mainWindow?.webContents.send(ipc_1.IPC_CHANNELS.UPDATE_DOWNLOADED, updateInfo);
+    });
+    console.log('[AutoUpdater] 자동 업데이트 시스템 초기화 완료');
 }
 //# sourceMappingURL=main.js.map
