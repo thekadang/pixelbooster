@@ -8,9 +8,9 @@
  * - 서버와 동기화
  *
  * 등급:
- * - Free: WebP만, 10개/배치
- * - Basic: WebP + AVIF, 50개/배치
- * - Pro: 모든 포맷, 200개/배치
+ * - Free: WebP만, 5개/배치
+ * - Basic: WebP + AVIF, 15개/배치
+ * - Pro: 모든 포맷, 무제한/배치
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
@@ -46,21 +46,21 @@ interface SubscriptionInfo {
 const TIER_FEATURES: Record<SubscriptionTier, SubscriptionInfo['features']> = {
   free: {
     formats: ['webp'],
-    maxBatchSize: 10,
+    maxBatchSize: 5,
     maxDevices: 1,
     backupEnabled: false,
     logEnabled: false,
   },
   basic: {
     formats: ['webp', 'avif'],
-    maxBatchSize: 50,
+    maxBatchSize: 15,
     maxDevices: 2,
     backupEnabled: true,
     logEnabled: true,
   },
   pro: {
     formats: ['webp', 'avif', 'jpg', 'png', 'gif', 'bmp', 'tiff'],
-    maxBatchSize: 200,
+    maxBatchSize: 0, // 0 = 무제한
     maxDevices: 5,
     backupEnabled: true,
     logEnabled: true,

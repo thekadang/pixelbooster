@@ -212,9 +212,9 @@ thekadang_pixelbooster/
    ↓
 3. 전략 패턴 적용 (ISubscriptionStrategy)
    - validateConversion() 호출
-   - Free: 10개, WebP만
-   - Basic: 50개, WebP + AVIF
-   - Pro: 200개, 모든 포맷
+   - Free: 5개, WebP만
+   - Basic: 15개, WebP + AVIF
+   - Pro: 무제한, 모든 포맷
    ↓
 4. IPC를 통해 Main Process로 전달
    ↓

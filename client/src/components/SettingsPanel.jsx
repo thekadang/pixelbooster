@@ -10,8 +10,9 @@ import './SettingsPanel.css';
  *
  * @param {Object} options - 현재 설정 옵션
  * @param {Function} onOptionsChange - 옵션 변경 시 호출되는 콜백
+ * @param {Object} subscription - 구독 정보 (tier, limits)
  */
-const SettingsPanel = ({ options, onOptionsChange }) => {
+const SettingsPanel = ({ options, onOptionsChange, subscription }) => {
   const [localOptions, setLocalOptions] = useState(
     options || {
       format: 'webp',
@@ -22,6 +23,16 @@ const SettingsPanel = ({ options, onOptionsChange }) => {
       height: undefined,
     }
   );
+
+  /**
+   * 포맷 사용 가능 여부 확인
+   */
+  const isFormatAllowed = (format) => {
+    if (!subscription) return true; // 구독 정보 없으면 모두 허용
+
+    const allowedFormats = subscription.limits.allowedFormats;
+    return allowedFormats.includes(format);
+  };
 
   /**
    * 옵션 변경 핸들러
@@ -47,6 +58,18 @@ const SettingsPanel = ({ options, onOptionsChange }) => {
     <div className="settings-panel">
       <h3 className="settings-title">⚙️ 변환 옵션</h3>
 
+      {/* 구독 등급 정보 */}
+      {subscription && (
+        <div className="subscription-info">
+          <p className="subscription-tier">
+            현재 등급: <strong>{subscription.tier.toUpperCase()}</strong>
+          </p>
+          <p className="subscription-limits">
+            배치 제한: <strong>{subscription.limits.maxBatchSize === 0 ? '무제한' : `${subscription.limits.maxBatchSize}개`}</strong>
+          </p>
+        </div>
+      )}
+
       {/* 출력 포맷 */}
       <div className="setting-group">
         <label className="setting-label">출력 포맷</label>
@@ -55,13 +78,27 @@ const SettingsPanel = ({ options, onOptionsChange }) => {
           value={localOptions.format}
           onChange={(e) => handleChange('format', e.target.value)}
         >
-          <option value="webp">WebP (권장)</option>
-          <option value="avif">AVIF (최고 압축률)</option>
-          <option value="jpg">JPG</option>
-          <option value="png">PNG</option>
-          <option value="gif">GIF</option>
-          <option value="bmp">BMP</option>
-          <option value="tiff">TIFF</option>
+          <option value="webp" disabled={!isFormatAllowed('webp')}>
+            WebP (권장) {!isFormatAllowed('webp') && '🔒'}
+          </option>
+          <option value="avif" disabled={!isFormatAllowed('avif')}>
+            AVIF (최고 압축률) {!isFormatAllowed('avif') && '🔒'}
+          </option>
+          <option value="jpg" disabled={!isFormatAllowed('jpg')}>
+            JPG {!isFormatAllowed('jpg') && '🔒'}
+          </option>
+          <option value="png" disabled={!isFormatAllowed('png')}>
+            PNG {!isFormatAllowed('png') && '🔒'}
+          </option>
+          <option value="gif" disabled={!isFormatAllowed('gif')}>
+            GIF {!isFormatAllowed('gif') && '🔒'}
+          </option>
+          <option value="bmp" disabled={!isFormatAllowed('bmp')}>
+            BMP {!isFormatAllowed('bmp') && '🔒'}
+          </option>
+          <option value="tiff" disabled={!isFormatAllowed('tiff')}>
+            TIFF {!isFormatAllowed('tiff') && '🔒'}
+          </option>
         </select>
         <p className="setting-description">
           {localOptions.format === 'webp' &&
@@ -72,6 +109,17 @@ const SettingsPanel = ({ options, onOptionsChange }) => {
           {localOptions.format === 'png' &&
             'PNG는 투명도가 필요한 이미지에 적합합니다.'}
         </p>
+        {subscription && subscription.tier === 'free' && (
+          <div className="upgrade-notice">
+            💡 <strong>Basic</strong> 이상 등급에서 AVIF 포맷을 사용할 수 있습니다.<br />
+            💎 <strong>Pro</strong> 등급에서 모든 포맷을 사용할 수 있습니다.
+          </div>
+        )}
+        {subscription && subscription.tier === 'basic' && (
+          <div className="upgrade-notice">
+            💎 <strong>Pro</strong> 등급으로 업그레이드하여 JPG, PNG, GIF, BMP, TIFF 포맷을 사용하세요.
+          </div>
+        )}
       </div>
 
       {/* 품질 설정 */}

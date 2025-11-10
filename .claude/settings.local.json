@@ -29,7 +29,8 @@
       "Bash(powershell:*)",
       "Bash(cat:*)",
       "Bash(echo:*)",
-      "Bash(.env)"
+      "Bash(.env)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []

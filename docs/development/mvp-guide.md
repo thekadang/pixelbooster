@@ -573,7 +573,7 @@ export function SettingsPage() {
             <li>✅ 폴더 전체 변환</li>
             <li>✅ 원본 파일 자동 백업</li>
             <li>✅ Excel 작업 로그</li>
-            <li>✅ 최대 50개 배치 처리</li>
+            <li>✅ 최대 15개 배치 처리 (Basic) / 무제한 (Pro)</li>
           </ul>
           <Button onClick={showUpgradeDialog}>
             업그레이드 (준비 중)

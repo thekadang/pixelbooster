@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import DropZone from './components/DropZone';
 import SettingsPanel from './components/SettingsPanel';
 import ProgressTracker from './components/ProgressTracker';
+import AuthModal from './components/AuthModal';
 import './App.css';
 
 const App = () => {
+  // 파일 및 처리 상태
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [processOptions, setProcessOptions] = useState({
     format: 'webp',
@@ -16,10 +18,57 @@ const App = () => {
   const [progress, setProgress] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // 인증 상태
+  const [authState, setAuthState] = useState({
+    isAuthenticated: false,
+    user: null,
+  });
+  const [subscription, setSubscription] = useState(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  /**
+   * 인증 상태 초기화 및 리스너 등록
+   */
   useEffect(() => {
     if (!window.require) return;
 
     const { ipcRenderer } = window.require('electron');
+
+    // 초기 인증 상태 조회
+    const loadAuthState = async () => {
+      try {
+        const result = await ipcRenderer.invoke('auth-get-state');
+        if (result.success && result.data) {
+          setAuthState({
+            isAuthenticated: result.data.isAuthenticated,
+            user: result.data.user,
+          });
+
+          // 구독 정보 조회
+          if (result.data.isAuthenticated) {
+            loadSubscription();
+          }
+        }
+      } catch (error) {
+        console.error('인증 상태 조회 실패:', error);
+      }
+    };
+
+    loadAuthState();
+
+    // 인증 상태 변경 리스너
+    const handleAuthStateChanged = (event, newAuthState) => {
+      setAuthState({
+        isAuthenticated: newAuthState.isAuthenticated,
+        user: newAuthState.user,
+      });
+
+      if (newAuthState.isAuthenticated) {
+        loadSubscription();
+      } else {
+        setSubscription(null);
+      }
+    };
 
     // 배치 진행 상태 리스너
     const handleBatchProgress = (event, progressData) => {
@@ -39,16 +88,35 @@ const App = () => {
       setIsProcessing(false);
     };
 
+    ipcRenderer.on('auth-state-changed', handleAuthStateChanged);
     ipcRenderer.on('batch-progress', handleBatchProgress);
     ipcRenderer.on('processing-complete', handleProcessingComplete);
     ipcRenderer.on('processing-error', handleProcessingError);
 
     return () => {
+      ipcRenderer.removeAllListeners('auth-state-changed');
       ipcRenderer.removeAllListeners('batch-progress');
       ipcRenderer.removeAllListeners('processing-complete');
       ipcRenderer.removeAllListeners('processing-error');
     };
   }, []);
+
+  /**
+   * 구독 정보 조회
+   */
+  const loadSubscription = async () => {
+    if (!window.require) return;
+
+    try {
+      const { ipcRenderer } = window.require('electron');
+      const result = await ipcRenderer.invoke('subscription-get');
+      if (result.success) {
+        setSubscription(result.data);
+      }
+    } catch (error) {
+      console.error('구독 정보 조회 실패:', error);
+    }
+  };
 
   /**
    * 파일 선택 핸들러
@@ -66,9 +134,63 @@ const App = () => {
   };
 
   /**
+   * 로그인 모달 열기
+   */
+  const handleOpenAuthModal = () => {
+    setIsAuthModalOpen(true);
+  };
+
+  /**
+   * 로그인 모달 닫기
+   */
+  const handleCloseAuthModal = () => {
+    setIsAuthModalOpen(false);
+  };
+
+  /**
+   * 로그인 성공 핸들러
+   */
+  const handleAuthSuccess = (authData) => {
+    setAuthState({
+      isAuthenticated: true,
+      user: authData.user,
+    });
+    loadSubscription();
+  };
+
+  /**
+   * 로그아웃 핸들러
+   */
+  const handleLogout = async () => {
+    if (!window.require) return;
+
+    try {
+      const { ipcRenderer } = window.require('electron');
+      const result = await ipcRenderer.invoke('auth-sign-out');
+      if (result.success) {
+        setAuthState({
+          isAuthenticated: false,
+          user: null,
+        });
+        setSubscription(null);
+        alert('로그아웃되었습니다.');
+      }
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  };
+
+  /**
    * 변환 시작 핸들러
    */
   const handleStartConversion = async () => {
+    // 인증 확인
+    if (!authState.isAuthenticated) {
+      alert('로그인이 필요합니다.');
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     if (selectedFiles.length === 0) {
       alert('변환할 파일을 선택하세요.');
       return;
@@ -77,6 +199,18 @@ const App = () => {
     if (!window.require) {
       alert('Electron 환경에서만 변환이 가능합니다.');
       return;
+    }
+
+    // 구독 등급별 배치 크기 제한 확인
+    if (subscription) {
+      const maxBatchSize = subscription.limits.maxBatchSize;
+      if (maxBatchSize > 0 && selectedFiles.length > maxBatchSize) {
+        alert(
+          `${subscription.tier.toUpperCase()} 등급은 최대 ${maxBatchSize}개까지 변환 가능합니다.\n` +
+          `업그레이드 하면 보다 많은 동시 변환이 가능합니다.`
+        );
+        return;
+      }
     }
 
     const { ipcRenderer } = window.require('electron');
@@ -128,11 +262,32 @@ const App = () => {
     <div className="app-container">
       {/* 헤더 */}
       <header className="app-header">
-        <h1 className="app-title">
-          <span className="emoji">🚀</span>
-          픽셀부스터
-        </h1>
-        <p className="app-subtitle">이미지 최적화 데스크톱 애플리케이션</p>
+        <div className="header-left">
+          <h1 className="app-title">
+            <span className="emoji">🚀</span>
+            픽셀부스터
+          </h1>
+          <p className="app-subtitle">이미지 최적화 데스크톱 애플리케이션</p>
+        </div>
+        <div className="header-right">
+          {authState.isAuthenticated ? (
+            <div className="user-info">
+              <span className="user-email">{authState.user?.email}</span>
+              {subscription && (
+                <span className="subscription-badge">
+                  {subscription.tier.toUpperCase()}
+                </span>
+              )}
+              <button className="logout-button" onClick={handleLogout}>
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <button className="login-button" onClick={handleOpenAuthModal}>
+              로그인
+            </button>
+          )}
+        </div>
       </header>
 
       {/* 메인 컨텐츠 */}
@@ -148,6 +303,7 @@ const App = () => {
             <SettingsPanel
               options={processOptions}
               onOptionsChange={handleOptionsChange}
+              subscription={subscription}
             />
 
             <div className="action-buttons">
@@ -177,9 +333,16 @@ const App = () => {
       <footer className="app-footer">
         <div className="status-badge">
           <span className="status-dot"></span>
-          Phase 2 개발 중 - 이미지 처리 기능 구현 완료
+          Phase 3-2 개발 중 - 인증 시스템 UI 구현 완료
         </div>
       </footer>
+
+      {/* 인증 모달 */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={handleCloseAuthModal}
+        onSuccess={handleAuthSuccess}
+      />
     </div>
   );
 };

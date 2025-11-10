@@ -5,8 +5,8 @@
 ## 📊 프로젝트 개요
 
 - **시작일**: 2025-11-10
-- **현재 단계**: Phase 3-1 완료! 🎉 (서버 연동 준비 60%)
-- **전체 진행률**: 60%
+- **현재 단계**: Phase 3-2 완료! 🎉 (인증 UI 구현 65%)
+- **전체 진행률**: 65%
 - **예상 완료일**: 2025-12-31
 
 ---
@@ -26,7 +26,12 @@
   - [x] SubscriptionManager 서비스 구현
   - [x] IPC 핸들러 추가 (인증/구독)
   - [x] 환경 변수 설정 (.env)
-- [ ] Phase 3-2 대기 중 (UI 컴포넌트 및 연동)
+- [x] Phase 3-2 완료 ✅ (65%) 🎉 (인증 UI 구현)
+  - [x] 로그인/회원가입 UI 컴포넌트 (LoginForm, SignUpForm, AuthModal)
+  - [x] App.jsx 인증 상태 관리 추가
+  - [x] 인증된 사용자만 이미지 변환 가능하도록 제한
+  - [x] 구독 등급별 기능 제한 UI (포맷, 배치 크기)
+- [ ] Phase 3-3 대기 중 (기기 인증 시스템)
 
 ---
 
@@ -207,22 +212,28 @@
 
 ---
 
-### Phase 3: 서버 연동 (2주) - ⚪ 대기
+### Phase 3: 서버 연동 (2주) - 🟡 진행 중 (65%)
 
 - [x] Supabase 설정
   - [x] 데이터베이스 스키마 생성
   - [x] RLS 정책 설정
   - [ ] Edge Functions 배포 준비
 
-- [ ] 인증 시스템
-  - [ ] 로그인/회원가입 UI
-  - [ ] Supabase Auth 연동
-  - [ ] 토큰 관리
+- [x] 인증 시스템 (Phase 3-1, 3-2 완료)
+  - [x] 로그인/회원가입 UI
+  - [x] Supabase Auth 연동
+  - [x] 토큰 관리
 
-- [ ] 구독 관리 API
-  - [ ] SubscriptionManager 구현
-  - [ ] 등급별 기능 제한 로직
-  - [ ] 서버 통신 테스트
+- [x] 구독 관리 API (Phase 3-1, 3-2 완료)
+  - [x] SubscriptionManager 구현
+  - [x] 등급별 기능 제한 로직
+  - [x] 서버 통신 테스트
+
+- [ ] 기기 인증 시스템 (Phase 3-3 예정)
+  - [ ] DeviceManager 구현
+  - [ ] 기기 ID 생성 및 저장
+  - [ ] Edge Function: login-with-device-check
+  - [ ] 기기 한도 초과 처리
 
 ---
 
@@ -304,6 +315,11 @@
   - docs/ 폴더에 카테고리별 spoke 문서
   - 일관성 유지 및 쉬운 탐색
 
+- **결정**: 인증 시스템 UI 우선 구현
+  - Phase 3-2에서 로그인/회원가입 UI 완성
+  - 구독 등급별 기능 제한 UI 통합
+  - 이유: 사용자 경험 최우선, 기능 접근성 향상
+
 ---
 
 ## 📝 다음 세션 시작 시 확인사항
@@ -362,11 +378,39 @@
 
 ---
 
-**마지막 업데이트**: 2025-11-10 (Phase 2 완료! 성능 최적화 및 이미지 처리 문서 완성 🎉)
+**마지막 업데이트**: 2025-11-10 (Phase 3-2 완료! 인증 UI 구현 🎉)
 **업데이트한 사람**: Claude Code
-**다음 업데이트 예정**: Phase 3 시작 (서버 연동) 시
+**다음 업데이트 예정**: Phase 3-3 시작 (기기 인증) 시
 
 ---
+
+### Phase 3-2: 인증 UI 구현 완료 ✅ 🎉
+- **인증 컴포넌트**: LoginForm, SignUpForm, AuthModal
+- **App.jsx 통합**: 인증 상태 관리 (useState, useEffect)
+- **인증 제한**: 로그인하지 않으면 이미지 변환 불가
+- **구독 등급별 기능 제한 UI**:
+  - Free: WebP만 사용 가능 (5개 배치)
+  - Basic: WebP, AVIF 사용 가능 (15개 배치)
+  - Pro: 모든 포맷 사용 가능 (무제한 배치)
+- **헤더 UI**: 로그인/로그아웃 버튼, 사용자 이메일, 구독 등급 표시
+- **구독 정보 표시**: SettingsPanel에 구독 등급 및 배치 제한 표시
+- **업그레이드 안내**: Free/Basic 사용자에게 Pro 업그레이드 안내
+
+자세한 구현 내용:
+- **파일 생성**:
+  ```
+  client/src/components/LoginForm.jsx/css       # 로그인 폼
+  client/src/components/SignUpForm.jsx/css      # 회원가입 폼
+  client/src/components/AuthModal.jsx/css       # 인증 모달
+  ```
+
+- **파일 수정**:
+  ```
+  client/src/App.jsx                            # 인증 상태 관리 및 제한 로직
+  client/src/App.css                            # 헤더 스타일 추가
+  client/src/components/SettingsPanel.jsx       # 구독 등급별 포맷 제한
+  client/src/components/SettingsPanel.css       # 구독 정보 및 업그레이드 안내 스타일
+  ```
 
 ## 💡 추가된 기능 (2025-11-10)
 

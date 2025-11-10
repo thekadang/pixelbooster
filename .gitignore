@@ -25,6 +25,8 @@ dist-electron/
 *.js.map
 # 단, TypeScript 소스와 함께 있지 않은 JS 파일만 제외
 # main.js, preload.js는 컴파일된 결과물이므로 커밋
+# services 폴더의 .js 파일은 TypeScript 컴파일 결과물이므로 제외
+client/src/services/*.js
 
 # Electron 빌드
 client/release/
