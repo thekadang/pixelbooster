@@ -2,14 +2,14 @@
 
 > 이 파일은 자동으로 업데이트됩니다. 커밋을 선택하여 해당 시점으로 롤백할 수 있습니다.
 
-**마지막 업데이트**: 2025-11-10 18:45
+**마지막 업데이트**: 2025-11-10 19:15
 
 ---
 
 ## 📊 통계
 
-- **총 커밋 수**: 16
-- **마지막 커밋**: 2025-11-10 18:45
+- **총 커밋 수**: 17
+- **마지막 커밋**: 2025-11-10 19:15
 - **현재 브랜치**: main
 - **원격 저장소**: https://github.com/thekadang/pixelbooster.git
 
@@ -17,7 +17,56 @@
 
 ## 🔖 커밋 목록
 
-### 2025-11-10 18:45 [CURRENT] ⭐ 🎉 ✅
+### 2025-11-10 19:15 [CURRENT] ⭐ ✅
+
+**커밋 해시**: `f92ce45`
+**작성자**: thekadang
+**브랜치**: main
+
+**주요 변경사항**:
+- 📊 **구독 등급별 배치 크기 제한 변경**
+  - Free: 10개 → 5개
+  - Basic: 50개 → 15개
+  - Pro: 200개 → 무제한 (0)
+
+- 🎨 **사용자 경험 개선**
+  - 초과 시 메시지에 업그레이드 안내 추가
+  - "업그레이드 하면 보다 많은 동시 변환이 가능합니다"
+
+- 📝 **문서 업데이트**
+  - task.md: Phase 3-2 배치 크기 정보 업데이트
+  - system-overview.md: 전략 패턴 문서 업데이트
+  - mvp-guide.md: 업그레이드 배너 텍스트 업데이트
+
+- 🔧 **빌드 시스템 개선**
+  - .gitignore: services/*.js 컴파일 결과물 제외 추가
+  - Git tracking에서 컴파일된 .js 파일 제거 (auth-manager.js, image-processor.js, secure-storage.js, subscription-manager.js)
+
+**파일 변경**:
+```
+20 files changed, 1041 insertions(+), 1235 deletions(-)
+create mode 100644 client/src/components/AuthModal.css
+create mode 100644 client/src/components/AuthModal.jsx
+create mode 100644 client/src/components/LoginForm.css
+create mode 100644 client/src/components/LoginForm.jsx
+create mode 100644 client/src/components/SignUpForm.css
+create mode 100644 client/src/components/SignUpForm.jsx
+delete mode 100644 client/src/services/auth-manager.js
+delete mode 100644 client/src/services/image-processor.js
+delete mode 100644 client/src/services/secure-storage.js
+delete mode 100644 client/src/services/subscription-manager.js
+```
+
+**롤백 방법**:
+```bash
+git checkout f92ce45
+# 또는 브랜치로 롤백하고 싶으면
+git reset --hard f92ce45
+```
+
+---
+
+### 2025-11-10 18:45 🎉 ✅
 
 **커밋 해시**: `2dee671`
 **작성자**: thekadang
