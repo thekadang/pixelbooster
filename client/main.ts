@@ -26,6 +26,7 @@ import { authManager } from './src/services/auth-manager';
 import { subscriptionManager } from './src/services/subscription-manager';
 import { LogManager } from './src/services/log-manager';
 import { BackupManager } from './src/services/backup-manager';
+import { AffiliateManager } from './src/services/affiliate-manager';
 
 // 개발 환경 판단
 const isDevelopment: boolean = isDev;
@@ -625,4 +626,117 @@ function setupIpcHandlers(): void {
       }
     }
   );
+
+  // ============================
+  // 어필리에이트 관리 IPC 핸들러
+  // ============================
+  const affiliateManager = new AffiliateManager();
+
+  // 추적 링크 생성 (또는 조회)
+  ipcMain.handle(IPC_CHANNELS.AFFILIATE_CREATE_LINK, async (_event: IpcMainInvokeEvent) => {
+    try {
+      // 현재 로그인한 사용자 ID 조회
+      const authResult = await authManager.getAuthState();
+      if (!authResult.isAuthenticated || !authResult.user) {
+        return { success: false, error: '로그인이 필요합니다.' };
+      }
+
+      const userId = authResult.user.id;
+      const result = await affiliateManager.createTrackingLink(userId);
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+      return { success: false, error: `추적 링크 생성 실패: ${errorMessage}` };
+    }
+  });
+
+  // 추적 링크 클릭 추적 (쿠키 저장)
+  ipcMain.handle(
+    IPC_CHANNELS.AFFILIATE_TRACK_REFERRAL,
+    async (_event: IpcMainInvokeEvent, trackingCode: string) => {
+      try {
+        await affiliateManager.trackReferral(trackingCode);
+        return { success: true, message: '추천 코드가 저장되었습니다.' };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        return { success: false, error: `추천 추적 실패: ${errorMessage}` };
+      }
+    }
+  );
+
+  // 회원가입 시 추천 연결
+  ipcMain.handle(
+    IPC_CHANNELS.AFFILIATE_LINK_TO_USER,
+    async (_event: IpcMainInvokeEvent, userId: string, subscriptionId: string) => {
+      try {
+        await affiliateManager.linkReferralToUser(userId, subscriptionId);
+        return { success: true, message: '추천이 연결되었습니다.' };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+        console.error('[Main] 추천 연결 실패:', errorMessage);
+        // 추천 연결 실패는 치명적이지 않으므로 경고만 표시
+        return { success: true, message: '추천 연결 선택적 실패 (계속 진행)' };
+      }
+    }
+  );
+
+  // 어필리에이트 통계 조회
+  ipcMain.handle(IPC_CHANNELS.AFFILIATE_GET_STATS, async (_event: IpcMainInvokeEvent) => {
+    try {
+      // 현재 로그인한 사용자 ID 조회
+      const authResult = await authManager.getAuthState();
+      if (!authResult.isAuthenticated || !authResult.user) {
+        return { success: false, error: '로그인이 필요합니다.' };
+      }
+
+      const userId = authResult.user.id;
+      const result = await affiliateManager.getReferralStats(userId);
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+      return { success: false, error: `통계 조회 실패: ${errorMessage}` };
+    }
+  });
+
+  // 추천 내역 조회
+  ipcMain.handle(IPC_CHANNELS.AFFILIATE_GET_REFERRALS, async (_event: IpcMainInvokeEvent) => {
+    try {
+      // 현재 로그인한 사용자 ID 조회
+      const authResult = await authManager.getAuthState();
+      if (!authResult.isAuthenticated || !authResult.user) {
+        return { success: false, error: '로그인이 필요합니다.' };
+      }
+
+      const userId = authResult.user.id;
+
+      // Supabase에서 추천 내역 조회
+      const { data, error } = await affiliateManager['supabase']
+        .from('affiliate_referrals')
+        .select(`
+          id,
+          created_at,
+          referred_user:auth.users!referred_user_id(email),
+          subscription:subscriptions!subscription_id(tier, status)
+        `)
+        .eq('affiliate_id', userId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // 데이터 포맷 변환 (MVP: 실제 수익 계산은 추후 구현)
+      const referrals = (data || []).map((ref: any) => ({
+        created_at: ref.created_at,
+        user_email: ref.referred_user?.email || '알 수 없음',
+        subscription_status: ref.subscription?.status || 'unknown',
+        subscription_tier: ref.subscription?.tier || 'free',
+        this_month_revenue: 0, // MVP: 추후 revenue_logs 테이블에서 계산
+        total_revenue: 0, // MVP: 추후 revenue_logs 테이블에서 계산
+      }));
+
+      return { success: true, data: referrals };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+      return { success: false, error: `추천 내역 조회 실패: ${errorMessage}` };
+    }
+  });
 }

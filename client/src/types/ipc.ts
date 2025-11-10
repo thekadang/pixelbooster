@@ -58,6 +58,13 @@ export const IPC_CHANNELS = {
   BACKUP_LIST: 'backup:list',
   BACKUP_DELETE: 'backup:delete',
   BACKUP_PROGRESS: 'backup-progress',
+
+  // 어필리에이트 관리 (AffiliateManager)
+  AFFILIATE_CREATE_LINK: 'affiliate:create-link',
+  AFFILIATE_TRACK_REFERRAL: 'affiliate:track-referral',
+  AFFILIATE_LINK_TO_USER: 'affiliate:link-to-user',
+  AFFILIATE_GET_STATS: 'affiliate:get-stats',
+  AFFILIATE_GET_REFERRALS: 'affiliate:get-referrals',
 } as const;
 
 /**

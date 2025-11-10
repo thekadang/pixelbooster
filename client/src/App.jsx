@@ -6,6 +6,7 @@ import ProgressTracker from './components/ProgressTracker';
 import AuthModal from './components/AuthModal';
 import LogViewer from './components/LogViewer';
 import BackupViewer from './components/BackupViewer';
+import AffiliatePanel from './components/AffiliatePanel';
 import './App.css';
 
 const App = () => {
@@ -318,6 +319,13 @@ const App = () => {
           <span className="tab-icon">💾</span>
           백업
         </button>
+        <button
+          className={`tab-button ${activeTab === 'affiliate' ? 'active' : ''}`}
+          onClick={() => setActiveTab('affiliate')}
+        >
+          <span className="tab-icon">🔗</span>
+          어필리에이트
+        </button>
       </nav>
 
       {/* 메인 컨텐츠 */}
@@ -374,6 +382,13 @@ const App = () => {
         {activeTab === 'backups' && (
           <section className="section">
             <BackupViewer />
+          </section>
+        )}
+
+        {/* 어필리에이트 탭 */}
+        {activeTab === 'affiliate' && (
+          <section className="section">
+            <AffiliatePanel />
           </section>
         )}
       </main>
