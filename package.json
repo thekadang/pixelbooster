@@ -82,6 +82,7 @@
       "client/dist/**/*",
       "client/main.js",
       "client/preload.js",
+      "client/src/**/*.js",
       "node_modules/**/*",
       "package.json"
     ],
