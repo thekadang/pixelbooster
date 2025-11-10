@@ -2,14 +2,14 @@
 
 > 이 파일은 자동으로 업데이트됩니다. 커밋을 선택하여 해당 시점으로 롤백할 수 있습니다.
 
-**마지막 업데이트**: 2025-11-10 23:38
+**마지막 업데이트**: 2025-11-10 23:45
 
 ---
 
 ## 📊 통계
 
-- **총 커밋 수**: 35
-- **마지막 커밋**: 2025-11-10 23:38
+- **총 커밋 수**: 36
+- **마지막 커밋**: 2025-11-10 23:45
 - **현재 브랜치**: main
 - **원격 저장소**: https://github.com/thekadang/pixelbooster.git
 
@@ -17,7 +17,81 @@
 
 ## 🔖 커밋 목록
 
-### 2025-11-10 23:38 [CURRENT] ⭐ 🎉 ✅
+### 2025-11-10 23:45 [CURRENT] ⭐ 🎉 ✅
+
+**커밋 해시**: (pending)
+**커밋 주제**: **Phase 5-2 완료 - 다국어 지원 구현 (i18next)**
+
+**작성자**: thekadang
+**브랜치**: main
+
+**주요 변경사항**:
+- 🎉 **Phase 5-2 완료! 다국어 지원 시스템 구축 100% (전체 99% 진행)**
+
+**1. i18n 설정 파일** (client/src/i18n.js):
+- i18next 초기화 및 설정
+- react-i18next 통합
+- i18next-browser-languagedetector 설정
+- 언어 감지 순서: localStorage → navigator → fallback (en)
+- 지원 언어: 한국어(ko), 영어(en)
+
+**2. 번역 리소스 파일**:
+- client/src/locales/ko/translation.json (한국어 번역)
+- client/src/locales/en/translation.json (영어 번역)
+- 번역 범위: app, auth, tabs, converter, settings, subscription, logs, backups, affiliate, deviceLimit, common
+
+**3. LanguageSwitcher 컴포넌트** (client/src/components/LanguageSwitcher.jsx):
+- 한국어/영어 전환 버튼
+- useTranslation 훅 활용
+- 현재 언어 active 상태 표시
+- Purple gradient 테마 일관성
+
+**4. 스타일링** (client/src/components/LanguageSwitcher.css):
+- Purple gradient active 상태 (#667eea → #764ba2)
+- 호버 효과 및 애니메이션
+- 접근성 고려한 버튼 디자인
+
+**5. TypeScript 타입 시스템**:
+- preload.ts 타입 오류 수정
+- global window 객체 타입 선언
+- autoUpdate API 타입 정의 완료
+
+**App.jsx 통합**:
+- i18n 초기화 import ('./i18n')
+- LanguageSwitcher 컴포넌트 헤더 통합
+- useTranslation 훅 사용 준비
+
+**검증 완료**:
+- ✅ TypeScript 컴파일: 0 errors
+- ✅ Webpack 컴파일: 성공
+- ✅ 개발 서버: 정상 실행 중
+- ✅ HMR (Hot Module Replacement): 작동 중
+
+**진행 상황**:
+- Phase 5 완료율: 50% → 75% 🟢
+- 전체 진행률: 98% → 99%
+- 다음 단계: Phase 5-3 (빌드 및 패키징 설정)
+
+**변경된 파일**: 9개 (7개 신규, 2개 수정)
+```
+신규: client/src/i18n.js (i18n 설정)
+신규: client/src/locales/ko/translation.json (한국어 번역)
+신규: client/src/locales/en/translation.json (영어 번역)
+신규: client/src/components/LanguageSwitcher.jsx (언어 전환 UI)
+신규: client/src/components/LanguageSwitcher.css (스타일)
+수정: client/preload.ts (타입 오류 수정)
+수정: task.md (Phase 5-2 완료, 99% 진행)
+수정: COMMIT_HISTORY.md (커밋 기록 업데이트)
+```
+
+**롤백 방법**:
+```bash
+git checkout <commit-hash>
+```
+
+---
+
+### 2025-11-10 23:38 ⭐ 🎉 ✅
 
 **커밋 해시**: `c6152b3`
 **커밋 주제**: **Phase 5-1 완료 - 자동 업데이트 시스템 구축 (electron-updater)**

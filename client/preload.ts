@@ -121,10 +121,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
 console.log('Preload script loaded (TypeScript)');
 
 // contextIsolation: false이므로 window 객체에 직접 autoUpdate API 노출
-if (typeof window !== 'undefined') {
-  const { ipcRenderer } = require('electron');
+const { ipcRenderer } = require('electron');
 
-  (window as any).autoUpdate = {
+(global as any).window = (global as any).window || {};
+((global as any).window as any).autoUpdate = {
     // 업데이트 확인
     checkForUpdates: () => ipcRenderer.invoke('update:check'),
 
@@ -163,8 +163,7 @@ if (typeof window !== 'undefined') {
     }
   };
 
-  console.log('[Preload] autoUpdate API 노출 완료');
-}
+console.log('[Preload] autoUpdate API 노출 완료');
 
 // 타입 선언을 위한 글로벌 확장
 declare global {

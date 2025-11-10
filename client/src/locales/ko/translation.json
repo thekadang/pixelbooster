@@ -8,13 +8,10 @@
     "signup": "회원가입",
     "email": "이메일",
     "password": "비밀번호",
-    "confirmPassword": "비밀번호 확인",
     "forgotPassword": "비밀번호를 잊으셨나요?",
     "signupLink": "계정이 없으신가요? 회원가입",
     "loginLink": "이미 계정이 있으신가요? 로그인",
-    "logout": "로그아웃",
-    "emailVerification": "이메일 인증 링크를 전송했습니다",
-    "resetPassword": "비밀번호 재설정"
+    "logout": "로그아웃"
   },
   "tabs": {
     "converter": "변환",
@@ -28,122 +25,24 @@
     "selectFolder": "폴더 선택",
     "format": "출력 포맷",
     "quality": "품질",
-    "compression": "압축",
-    "resize": "리사이즈",
-    "width": "너비",
-    "height": "높이",
-    "preset": "프리셋",
-    "fast": "빠른 변환",
-    "balanced": "균형잡힌",
-    "best": "최고 품질",
     "startConversion": "변환 시작",
     "cancel": "취소",
-    "processing": "처리 중...",
-    "complete": "완료",
-    "filesSelected": "{{count}}개 파일 선택됨"
+    "processing": "처리 중..."
   },
   "settings": {
-    "title": "설정",
     "language": "언어",
-    "selectLanguage": "언어 선택",
-    "korean": "한국어",
-    "english": "English"
+    "preset": "빠른 프리셋"
   },
   "subscription": {
     "free": "무료",
     "basic": "베이직",
     "pro": "프로",
-    "upgrade": "업그레이드",
-    "expired": "만료됨",
-    "active": "활성",
-    "tier": "등급",
-    "expiresAt": "만료일",
-    "deviceLimit": "기기 한도",
-    "deviceCount": "등록된 기기"
-  },
-  "logs": {
-    "title": "작업 로그",
-    "date": "날짜",
-    "file": "파일",
-    "format": "포맷",
-    "size": "크기",
-    "compression": "압축률",
-    "status": "상태",
-    "success": "성공",
-    "failed": "실패",
-    "filter": "필터",
-    "export": "내보내기",
-    "clear": "지우기"
-  },
-  "backup": {
-    "title": "백업 관리",
-    "restore": "복원",
-    "delete": "삭제",
-    "active": "활성",
-    "restored": "복원됨",
-    "deleted": "삭제됨",
-    "date": "백업 날짜",
-    "size": "크기",
-    "location": "위치"
-  },
-  "affiliate": {
-    "title": "어필리에이트",
-    "trackingLink": "추적 링크",
-    "copy": "복사",
-    "share": "공유",
-    "stats": "통계",
-    "totalReferrals": "총 추천",
-    "activeSubscribers": "활성 구독자",
-    "monthlyRevenue": "이번 달 수익",
-    "totalRevenue": "총 누적 수익",
-    "referrals": "추천 내역",
-    "user": "사용자",
-    "status": "상태",
-    "tier": "등급",
-    "revenue": "수익"
+    "upgrade": "업그레이드"
   },
   "common": {
     "save": "저장",
     "cancel": "취소",
-    "confirm": "확인",
-    "delete": "삭제",
-    "edit": "수정",
     "close": "닫기",
-    "loading": "로딩 중...",
-    "error": "오류",
-    "success": "성공",
-    "warning": "경고",
-    "info": "정보",
-    "yes": "예",
-    "no": "아니오",
-    "ok": "확인",
-    "apply": "적용",
-    "reset": "초기화",
-    "refresh": "새로고침",
-    "search": "검색",
-    "filter": "필터",
-    "sort": "정렬",
-    "download": "다운로드",
-    "upload": "업로드"
-  },
-  "errors": {
-    "general": "오류가 발생했습니다",
-    "network": "네트워크 연결 오류",
-    "auth": "인증 실패",
-    "permission": "권한이 없습니다",
-    "notFound": "찾을 수 없습니다",
-    "invalidInput": "잘못된 입력입니다",
-    "fileTooBig": "파일이 너무 큽니다",
-    "unsupportedFormat": "지원하지 않는 포맷입니다"
-  },
-  "messages": {
-    "conversionSuccess": "{{count}}개 파일 변환 완료!",
-    "conversionFailed": "변환 실패: {{error}}",
-    "loginSuccess": "로그인 성공",
-    "logoutSuccess": "로그아웃되었습니다",
-    "saveSuccess": "저장되었습니다",
-    "deleteSuccess": "삭제되었습니다",
-    "copySuccess": "복사되었습니다",
-    "upgradeRequired": "업그레이드가 필요합니다"
+    "loading": "로딩 중..."
   }
 }
