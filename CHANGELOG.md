@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.1] - 2025-11-11 (버그 수정 패치) 🐛
+
+### Fixed (수정된 버그)
+- **로그인 입력 필드 차단 문제 수정** (CRITICAL 버그)
+  - 문제: 로그인 모달의 이메일 및 비밀번호 입력 필드에서 텍스트 입력 불가
+  - 원인: AuthModal 오버레이의 이벤트 핸들러가 입력 필드와 간섭
+  - 해결:
+    - `AuthModal.jsx`: 오버레이 클릭 핸들러 개선 (`e.target === e.currentTarget` 체크)
+    - `LoginForm.jsx`: 입력 필드에 `autoFocus`, `autoComplete`, `tabIndex` 추가
+    - `LoginForm.css`: `pointer-events: auto`, `user-select: text` 명시적 설정
+    - `AuthModal.css`: `z-index: 1001` 설정으로 레이어 우선순위 명확화
+  - 영향 범위: client/src/components/AuthModal.jsx, LoginForm.jsx, LoginForm.css, AuthModal.css
+  - 문서화: docs/bugfixes/login-input-blocking-fix.md
+
+### Security (보안 개선)
+- 입력 필드 접근성 개선으로 사용자 경험 및 보안성 향상
+- 명시적 `autoComplete` 속성으로 브라우저 자동완성 보안 강화
+
+---
+
 ## [0.1.0] - 2025-11-11 (첫 공식 릴리스) 🎉
 
 ### Added (추가된 기능)

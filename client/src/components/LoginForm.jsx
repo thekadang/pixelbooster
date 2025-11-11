@@ -76,6 +76,9 @@ const LoginForm = ({ onSuccess, onSwitchToSignUp }) => {
             onChange={(e) => setEmail(e.target.value)}
             disabled={isLoading}
             required
+            autoFocus
+            autoComplete="email"
+            tabIndex={0}
           />
         </div>
 
@@ -93,6 +96,8 @@ const LoginForm = ({ onSuccess, onSwitchToSignUp }) => {
             onChange={(e) => setPassword(e.target.value)}
             disabled={isLoading}
             required
+            autoComplete="current-password"
+            tabIndex={0}
           />
         </div>
 

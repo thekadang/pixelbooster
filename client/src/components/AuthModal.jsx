@@ -31,9 +31,19 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
     setMode('login');
   };
 
+  /**
+   * 오버레이 클릭 핸들러 (모달 외부 클릭 시 닫기)
+   */
+  const handleOverlayClick = (e) => {
+    // 오버레이 자체를 클릭했을 때만 닫기 (자식 요소 클릭은 무시)
+    if (e.target === e.currentTarget) {
+      onClose && onClose();
+    }
+  };
+
   return (
-    <div className="auth-modal-overlay" onClick={onClose}>
-      <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="auth-modal-overlay" onClick={handleOverlayClick} onMouseDown={handleOverlayClick}>
+      <div className="auth-modal-content" onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
         {/* 닫기 버튼 */}
         <button className="close-button" onClick={onClose} title="닫기">
           ✕
