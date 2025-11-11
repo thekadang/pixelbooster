@@ -293,9 +293,8 @@ export class LogManager {
         };
       }
 
-      // 4. 현재 행 번호 가져오기 (마지막 행 + 1)
-      const lastRowNumber = worksheet.lastRow?.number || 1;
-      let currentId = lastRowNumber; // 헤더 제외
+      // 4. 순번 초기화 (1부터 시작)
+      let sequentialId = 1;
 
       // 5. 각 파일 항목을 새 행으로 추가
       for (const item of batchProgress.items) {
@@ -315,7 +314,7 @@ export class LogManager {
 
         // 로그 엔트리 생성
         const logEntry: LogEntry = {
-          id: currentId,
+          id: sequentialId, // 순번 사용 (컬럼 인덱스 아님)
           timestamp: new Date(),
           filename: path.basename(item.inputPath),
           inputPath: item.inputPath,
@@ -348,14 +347,16 @@ export class LogManager {
         });
 
         // 하이퍼링크 추가 (원본 경로, 출력 경로)
-        const inputPathCell = row.getCell('inputPath');
+        // 컬럼 번호로 직접 접근 (1-based index)
+        // inputPath는 4번째 컬럼 (D), outputPath는 5번째 컬럼 (E)
+        const inputPathCell = row.getCell(4);
         inputPathCell.value = {
           text: logEntry.inputPath,
           hyperlink: `file:///${logEntry.inputPath.replace(/\\/g, '/')}`,
         };
         inputPathCell.font = { color: { argb: 'FF0000FF' }, underline: true };
 
-        const outputPathCell = row.getCell('outputPath');
+        const outputPathCell = row.getCell(5);
         outputPathCell.value = {
           text: logEntry.outputPath,
           hyperlink: `file:///${logEntry.outputPath.replace(/\\/g, '/')}`,
@@ -363,14 +364,16 @@ export class LogManager {
         outputPathCell.font = { color: { argb: 'FF0000FF' }, underline: true };
 
         // 상태별 색상 적용
+        // status는 11번째 컬럼 (K)
+        const statusCell = row.getCell(11);
         if (logEntry.status === 'success') {
-          row.getCell('status').fill = {
+          statusCell.fill = {
             type: 'pattern',
             pattern: 'solid',
             fgColor: { argb: 'FF00FF00' }, // 녹색
           };
         } else {
-          row.getCell('status').fill = {
+          statusCell.fill = {
             type: 'pattern',
             pattern: 'solid',
             fgColor: { argb: 'FFFF0000' }, // 빨간색
@@ -380,7 +383,7 @@ export class LogManager {
         // 인덱스 업데이트
         await this.updateIndex(logEntry);
 
-        currentId++;
+        sequentialId++; // 다음 순번으로 증가
       }
 
       // 6. "통계" 시트 업데이트

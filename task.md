@@ -40,7 +40,12 @@
   - 이미지 변환 기본 기능 테스트 성공 (WebP 변환)
   - 백업 시스템 테스트 성공
   - BUG_REPORT.md 작성 (해결된 버그 및 발견된 버그 문서화)
-  - 발견된 버그: Excel 로그 기록 실패 (컬럼 한도 초과) - NON-CRITICAL
+- [x] Excel 로그 시스템 버그 수정 ✅
+  - 원인: row.getCell('key') 방식의 컬럼 접근 오류
+  - 해결: 컬럼 번호 직접 접근 방식으로 변경 (row.getCell(4), row.getCell(5), row.getCell(11))
+  - 파일: client/src/services/log-manager.ts (Line 296-383)
+  - TypeScript 컴파일 성공 (0 errors)
+  - BUG_REPORT.md 업데이트 (Excel 버그 → RESOLVED)
 
 ---
 
