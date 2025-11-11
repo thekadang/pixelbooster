@@ -46,6 +46,21 @@
   - 파일: client/src/services/log-manager.ts (Line 296-383)
   - TypeScript 컴파일 성공 (0 errors)
   - BUG_REPORT.md 업데이트 (Excel 버그 → RESOLVED)
+- [x] 로그인 입력 필드 차단 문제 수정 ✅ (CRITICAL 버그)
+  - 문제: 로그인 모달에서 이메일/비밀번호 입력 불가
+  - 원인: AuthModal 오버레이 클릭 핸들러가 입력 필드와 간섭
+  - 해결: 오버레이 클릭 핸들러 개선, 입력 필드 속성 추가, CSS 명시적 설정
+  - 영향: AuthModal.jsx, LoginForm.jsx, LoginForm.css, AuthModal.css
+  - 문서: docs/bugfixes/login-input-blocking-fix.md
+  - v0.1.1 릴리스 준비 완료 ✅
+- [ ] 자동 업데이트 작동 확인 및 수정 🔄 (진행 중)
+  - 문제: v0.1.0 → v0.1.1 자동 업데이트가 작동하지 않음
+  - 원인 분석:
+    - 파일명 불일치: "픽셀부스터" vs "PixelBooster"
+    - productName을 "PixelBooster"로 변경하여 해결
+  - 디버깅 로그 추가: autoUpdater.logger = console
+  - v0.1.1 재빌드 완료 (디버깅 로그 포함)
+  - GitHub Release 업로드 대기 중
 
 ---
 

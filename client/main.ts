@@ -912,9 +912,16 @@ function setupAutoUpdater(): void {
     return;
   }
 
+  // 디버깅 로그 활성화
+  autoUpdater.logger = console;
+
   // 자동 다운로드 활성화
   autoUpdater.autoDownload = false; // 사용자 확인 후 다운로드
   autoUpdater.autoInstallOnAppQuit = true; // 앱 종료 시 자동 설치
+
+  // 업데이트 URL 로그 출력
+  console.log('[AutoUpdater] 현재 버전:', app.getVersion());
+  console.log('[AutoUpdater] 업데이트 확인 URL: https://github.com/thekadang/pixelbooster/releases');
 
   // 업데이트 확인 시작
   autoUpdater.on('checking-for-update', () => {

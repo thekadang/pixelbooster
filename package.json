@@ -73,7 +73,7 @@
   },
   "build": {
     "appId": "com.thekadang.pixelbooster",
-    "productName": "픽셀부스터",
+    "productName": "PixelBooster",
     "protocols": [
       {
         "name": "pixelbooster",

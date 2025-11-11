@@ -783,9 +783,14 @@ function setupAutoUpdater() {
         console.log('[AutoUpdater] 개발 환경: 자동 업데이트 비활성화');
         return;
     }
+    // 디버깅 로그 활성화
+    electron_updater_1.autoUpdater.logger = console;
     // 자동 다운로드 활성화
     electron_updater_1.autoUpdater.autoDownload = false; // 사용자 확인 후 다운로드
     electron_updater_1.autoUpdater.autoInstallOnAppQuit = true; // 앱 종료 시 자동 설치
+    // 업데이트 URL 로그 출력
+    console.log('[AutoUpdater] 현재 버전:', electron_1.app.getVersion());
+    console.log('[AutoUpdater] 업데이트 확인 URL: https://github.com/thekadang/pixelbooster/releases');
     // 업데이트 확인 시작
     electron_updater_1.autoUpdater.on('checking-for-update', () => {
         console.log('[AutoUpdater] 업데이트 확인 중...');
