@@ -182,6 +182,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CSP 정책 위반 오류 제거
 - 스크롤 영역 분리 및 overflow 설정 개선
 - 병렬 처리 시 null 참조 오류 수정
+- **Preload script window 객체 접근 오류 수정** (client/preload.ts:126-127)
+  - global.window에서 window 직접 접근으로 변경
+  - TypeScript 타입 선언 추가
+- **프로덕션 빌드에서 DevTools 자동 열림 문제 수정** (client/main.ts:98)
+  - DevTools를 개발 환경에서만 열리도록 조건 추가
+  - 프로덕션 빌드 시 DevTools 자동 비활성화
 
 ### Security (보안 개선)
 - **환경 변수 보안**
