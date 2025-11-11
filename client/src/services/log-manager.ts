@@ -329,26 +329,27 @@ export class LogManager {
           processingTime,
         };
 
-        // 행 추가
-        const row = worksheet.addRow({
-          id: logEntry.id,
-          timestamp: logEntry.timestamp,
-          filename: logEntry.filename,
-          inputPath: logEntry.inputPath,
-          outputPath: logEntry.outputPath,
-          inputSize: this.formatFileSize(logEntry.inputSize),
-          outputSize: this.formatFileSize(logEntry.outputSize),
-          compressionRatio: `${logEntry.compressionRatio.toFixed(1)}%`,
-          format: logEntry.format.toUpperCase(),
-          quality: logEntry.quality,
-          status: logEntry.status === 'success' ? '성공' : '실패',
-          error: logEntry.error || '',
-          processingTime: `${(logEntry.processingTime / 1000).toFixed(1)}초`,
-        });
+        // 행 추가 - 배열 방식으로 컬럼 순서대로 값 삽입
+        const rowValues = [
+          logEntry.id,                                                  // 1. 번호
+          logEntry.timestamp,                                            // 2. 작업 일시
+          logEntry.filename,                                             // 3. 파일명
+          logEntry.inputPath,                                            // 4. 원본 경로
+          logEntry.outputPath,                                           // 5. 출력 경로
+          this.formatFileSize(logEntry.inputSize),                       // 6. 원본 크기
+          this.formatFileSize(logEntry.outputSize),                      // 7. 출력 크기
+          `${logEntry.compressionRatio.toFixed(1)}%`,                    // 8. 압축률
+          logEntry.format.toUpperCase(),                                 // 9. 포맷
+          logEntry.quality,                                              // 10. 품질
+          logEntry.status === 'success' ? '성공' : '실패',             // 11. 상태
+          logEntry.error || '',                                          // 12. 에러 메시지
+          `${(logEntry.processingTime / 1000).toFixed(1)}초`,           // 13. 처리 시간
+        ];
+
+        const row = worksheet.addRow(rowValues);
 
         // 하이퍼링크 추가 (원본 경로, 출력 경로)
-        // 컬럼 번호로 직접 접근 (1-based index)
-        // inputPath는 4번째 컬럼 (D), outputPath는 5번째 컬럼 (E)
+        // inputPath는 4번째 컬럼 (D)
         const inputPathCell = row.getCell(4);
         inputPathCell.value = {
           text: logEntry.inputPath,
@@ -356,6 +357,7 @@ export class LogManager {
         };
         inputPathCell.font = { color: { argb: 'FF0000FF' }, underline: true };
 
+        // outputPath는 5번째 컬럼 (E)
         const outputPathCell = row.getCell(5);
         outputPathCell.value = {
           text: logEntry.outputPath,
@@ -363,21 +365,22 @@ export class LogManager {
         };
         outputPathCell.font = { color: { argb: 'FF0000FF' }, underline: true };
 
-        // 상태별 색상 적용
-        // status는 11번째 컬럼 (K)
+        // 상태별 색상 적용 (status는 11번째 컬럼)
         const statusCell = row.getCell(11);
         if (logEntry.status === 'success') {
           statusCell.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'FF00FF00' }, // 녹색
+            fgColor: { argb: 'FF90EE90' }, // 연한 녹색
           };
+          statusCell.font = { bold: true, color: { argb: 'FF006400' } }; // 진한 녹색 글자
         } else {
           statusCell.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'FFFF0000' }, // 빨간색
+            fgColor: { argb: 'FFFFCCCC' }, // 연한 빨간색
           };
+          statusCell.font = { bold: true, color: { argb: 'FF8B0000' } }; // 진한 빨간색 글자
         }
 
         // 인덱스 업데이트
