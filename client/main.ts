@@ -93,9 +93,10 @@ function createMainWindow(): void {
     );
   }
 
-  // 개발자 도구 자동 열기 (디버깅을 위해 임시로 항상 활성화)
-  // TODO: 프로덕션 배포 시 isDevelopment 조건으로 변경
-  mainWindow.webContents.openDevTools();
+  // 개발자 도구 자동 열기 (개발 환경에서만)
+  if (isDevelopment) {
+    mainWindow.webContents.openDevTools();
+  }
 
   // 로딩 완료 후 윈도우 표시
   mainWindow.once('ready-to-show', () => {
